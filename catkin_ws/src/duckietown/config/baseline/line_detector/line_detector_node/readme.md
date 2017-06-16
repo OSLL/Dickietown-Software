@@ -9,6 +9,8 @@ In the configuration represented as a three byte where:
 Saturation in the range from 0 to 255;<br>
 Value in the range from 0 to 255 ]
 
+Can be useful: [HSV color picker](http://alloyui.com/examples/color-picker/hsv/)
+
 ## File structure
 
 * `img_size`: size of area for detection
