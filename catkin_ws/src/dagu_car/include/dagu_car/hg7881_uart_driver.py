@@ -2,6 +2,9 @@
 
 # Wrapping UART communication with connected to Arduino HG7881 driver
 #
+# requires python-serial
+# apt-get install python-serial
+#
 # date:    02 may 2017
 #
 # authors: Constantin Chayka <pro100kot14@gmail.com>
