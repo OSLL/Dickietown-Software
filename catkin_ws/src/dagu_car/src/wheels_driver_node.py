@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from duckietown_msgs.msg import WheelsCmdStamped, BoolStamped
-from dagu_car.dagu_wheels_driver import DaguWheelsDriver
+from dagu_car.hg7881_uart_driver import HG7881ArduinoDriver
 
 class WheelsDriverNode(object):
     def __init__(self):
@@ -10,7 +10,7 @@ class WheelsDriverNode(object):
         self.estop=False
 
         # Setup publishers
-        self.driver = DaguWheelsDriver()
+        self.driver = HG7881ArduinoDriver()
         #add publisher for wheels command wih execution time
         self.msg_wheels_cmd = WheelsCmdStamped()
         self.pub_wheels_cmd = rospy.Publisher("~wheels_cmd_executed",WheelsCmdStamped, queue_size=1)
