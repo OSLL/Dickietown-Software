@@ -63,3 +63,10 @@ Currently, <algorithm> can be either ‘baseline’ or ‘LEDDetector_plots’ t
 To run all test with all algorithms, execute:
 
 	rosrun led_detection unittests.py '*' '*'
+
+How detection and interpretation works
+-----------
+[LED_detector_node](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/f23-LED/led_detection/src/LED_detector_node.py) node receives the image from the camera. The process of detection is triggered by the flag in the topic <i>/duckmobile/LED_detector_node/trigger</i>. The result of the work of [LED_detector_node](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/f23-LED/led_detection/src/LED_detector_node.py) is an [LEDDetectionArray](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/LEDDetectionArray.msg) (array of [LEDDetection](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/LEDDetection.msg)) in the topic <i>raw_led_detection</i>.
+
+For interpretation, as it is not strange, the node [LED_interpreter_node](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/f23-LED/led_interpreter/src/LED_interpreter_node.py) answers. The node get data from <i>raw_led_detection</i> topic and uses parameters from configuration files [location_config](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown/config/baseline/led_interpreter/location_config.yaml) to determine the scope boundaries and [LED_protocol](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown/config/baseline/led_interpreter/LED_protocol.yaml) where the colors and frequencies of the led signals are described.
+The result of the interpretation ([SignalsDetection](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/SignalsDetection.msg)) is published in the topic <i>signals_detection</i>
