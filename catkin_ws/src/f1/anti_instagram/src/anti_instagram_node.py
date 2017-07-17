@@ -53,7 +53,7 @@ class AntiInstagramNode():
 
 		if self.image_pub_switch:
 			tk = TimeKeeper(image_msg)
-			cv_image = self.bridge.imgmsg_to_cv2(image_msg, "bgr8")
+			cv_image = self.bridge.compressed_imgmsg_to_cv2(image_msg, "bgr8")
 
 			corrected_image_cv2 = self.ai.applyTransform(cv_image)
 			tk.completed('applyTransform')
