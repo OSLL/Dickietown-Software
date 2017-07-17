@@ -48,7 +48,7 @@ class Matcher:
         
         filtered_contours = []
         
-        contours, hierarchy = cv2.findContours(\
+        _, contours, hierarchy = cv2.findContours(\
                 thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
         contour_area = [ (cv2.contourArea(c), (c) ) for c in contours]
         contour_area = sorted(contour_area,reverse=True, key=lambda x: x[0])
@@ -141,7 +141,8 @@ class StaticObjectDetectorNode:
         self.pub_image = rospy.Publisher("~cone_detection_image", Image, queue_size=1)
         self.pub_detections_list = rospy.Publisher("~detection_list", ObstacleImageDetectionList, queue_size=1)
         self.bridge = CvBridge()
-	turn_off_LEDs(speed=5)
+        #comand below commented until leds disable on our bot 
+        #turn_off_LEDs(speed=5)
 
         rospy.loginfo("[%s] Initialized." %(self.name))
 
