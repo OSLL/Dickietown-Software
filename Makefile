@@ -26,7 +26,8 @@ build-parallel:
 	catkin_make -C $(catkin_ws) --make-args "-j4"
 
 build:
-	catkin_make -C $(catkin_ws) 
+	catkin_make -C $(catkin_ws) --make-args "-j1"
+
 
 # Unit tests
 # Teddy: make it so "make unittests" runs all unit tests
