@@ -252,7 +252,6 @@
 				<arg name="config" value="$(arg config)"/>
 				<!-- NOTE: "line_detector_param_file_name" as special case -->
 				<arg name="param_file_name" value="$(arg line_detector_param_file_name)"/>
-				<arg name="line_detector_param_file_name" value="$(arg line_detector_param_file_name)"/>
 				<arg name="verbose" value="$(arg verbose)" />
 			</include>
 		</group>
