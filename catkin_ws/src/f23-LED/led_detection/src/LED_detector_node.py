@@ -115,7 +115,7 @@ class LEDDetectorNode(object):
             images[i]['timestamp'] = v['timestamp']
             images[i]['rgb'][:] = v['rgb']
         
-        det = LEDDetector(False, False, False, self.pub_debug)
+        det = LEDDetector(False, False, False, self.pub_debug) #2nd True - verbose
         rgb0 = self.data[0]['rgb']
         #mask = np.ones(dtype='bool', shape=rgb0.shape)
         tic = time.time()
