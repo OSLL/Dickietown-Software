@@ -48,7 +48,10 @@ class ObstacleSafetyNode:
         width = detections_msg.imwidth
         height = detections_msg.imheight
         too_close = False
-        for obstacle in detections_msg.list: 
+        for obstacle in detections_msg.list:
+            # temporary disable ducks
+            if obstacle.type.type == ObstacleType.DUCKIE:
+                continue 
             marker = Marker()
             rect = obstacle.bounding_box
             p.x = float(rect.x)/float(width)
