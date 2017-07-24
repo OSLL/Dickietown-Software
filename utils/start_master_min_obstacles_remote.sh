@@ -5,5 +5,5 @@ intersectionType:=trafficLight \
 /LED/emitter:=false /LED/detector:=true /LED/interpreter:=true \
 visualization:=false \
 /navigation/apriltags_random:=false apriltags:=false \
-obstacle_avoidance:=true \
+obstacle_avoidance:=true /camera/raw:=true \
 line_detector_param_file_name:=osll
