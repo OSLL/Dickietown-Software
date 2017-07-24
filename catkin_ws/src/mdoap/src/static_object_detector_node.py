@@ -101,17 +101,21 @@ class Matcher:
         
         # get filtered contours
         cone_contours = self.get_filtered_contours(img, "CONE")
-        duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
+	# disable duck detection
+        # duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
 
-        all_contours = [duck_contours, cone_contours]
+        # disable duck detection
+	# all_contours = [duck_contours, cone_contours]
+	all_contours = [cone_contours]
         for i, contours in enumerate(all_contours):
             for (cnt, box, ds, aspect_ratio, mean_color)  in contours:
                             
                 # plot box around contour
                 x,y,w,h = box
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.putText(img,self.terms[i], (x,y), font, 0.5,mean_color,4)
-                cv2.rectangle(img,(x,y),(x+w,y+h), mean_color,2)
+		# disable plot
+                #font = cv2.FONT_HERSHEY_SIMPLEX
+                #cv2.putText(img,self.terms[i], (x,y), font, 0.5,mean_color,4)
+                #cv2.rectangle(img,(x,y),(x+w,y+h), mean_color,2)
                 
                 r = Rect()
                 r.x = x
@@ -165,11 +169,12 @@ class StaticObjectDetectorNode:
         detections.header.stamp = image_msg.header.stamp
         detections.header.frame_id = image_msg.header.frame_id
         self.pub_detections_list.publish(detections)
-        height,width = img.shape[:2]
-        try:
-            self.pub_image.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
-        except CvBridgeError as e:
-            print(e)
+	# disable image plot        
+	#height,width = img.shape[:2]
+        #try:
+        #    self.pub_image.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
+        #except CvBridgeError as e:
+        #    print(e)
 
         self.thread_lock.release()
 

@@ -82,7 +82,7 @@ class ObstacleSafetyNode:
                     # rospy.loginfo("Duckie too close y: %f dist: %f" %(projected_point.gp.y, minDist))
                     too_close = True
                 elif obstacle.type.type == ObstacleType.CONE and obj_width<0.3: # and -0.0785< projected_point.gp.y < 0.18:
-                    # rospy.loginfo("Cone too close y: %f dist: %f" %(projected_point.gp.y, minDist))
+                    rospy.loginfo("Cone too close y: %f dist: %f" %(projected_point.gp.y, minDist))
                     too_close = True
             projection.distance = dist
             projection_list.list.append(projection)
