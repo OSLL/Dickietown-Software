@@ -72,7 +72,7 @@ class ObstacleSafetyNode:
 
             dist = projected_point.gp.x**2 + projected_point.gp.y**2 + projected_point.gp.z**2
             dist = dist ** 0.5
-
+	    rospy.loginfo("[obstacle_safety_node] Object y: %f dist: %f" %(projected_point.gp.y, minDist))
             if dist<minDist:
                 minDist = dist
             if dist<self.closeness_threshold:
