@@ -75,7 +75,8 @@ class ObstacleSafetyNode:
 	    rospy.loginfo("[obstacle_safety_node] Object y: %f dist: %f" %(projected_point.gp.y, minDist))
             if dist<minDist:
                 minDist = dist
-            if dist<self.closeness_threshold:
+	    # or True - always detect cone 
+            if dist<self.closeness_threshold or True:
                 # Trying not to falsely detect the lane lines as duckies that are too close
                 
                 if obstacle.type.type == ObstacleType.DUCKIE and projected_point.gp.y < 0.18:
