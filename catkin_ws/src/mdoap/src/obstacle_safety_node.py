@@ -77,7 +77,7 @@ class ObstacleSafetyNode:
             if dist<minDist:
                 minDist = dist
 		
-            if  projected_point.gp.y < 0.2:   
+            if  projected_point.gp.y < 0.45:   
 		# hack
                 b = BoolStamped()
                 b.header = detections_msg.header
