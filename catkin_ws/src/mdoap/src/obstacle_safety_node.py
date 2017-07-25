@@ -9,7 +9,7 @@ class ObstacleSafetyNode:
     def __init__(self):
         self.name = 'obstacle_safety_node'
         rospy.loginfo('[%s] started', self.name)
-
+	self.maxMarkers = 0
         self.sub_ = rospy.Subscriber("~detection_list", ObstacleImageDetectionList, self.cbDetectionsList, queue_size=1)
 
         rospy.wait_for_service('ground_projection/get_ground_coordinate')
@@ -19,7 +19,7 @@ class ObstacleSafetyNode:
         self.pub_projections = rospy.Publisher("~detection_list_proj", ObstacleProjectedDetectionList, queue_size=1)
         
         self.pub_markers = rospy.Publisher("~object_detection_markers", MarkerArray, queue_size=1)
-        self.maxMarkers = 0
+        
 
         self.veh_name = rospy.get_namespace().strip("/")
 
@@ -49,6 +49,13 @@ class ObstacleSafetyNode:
         height = detections_msg.imheight
         too_close = False
         for obstacle in detections_msg.list:
+	    # hack
+            b = BoolStamped()
+            b.header = detections_msg.header
+            b.data = True
+            self.pub_too_close.publish(b)
+	    return
+
             # temporary disable ducks
             if obstacle.type.type == ObstacleType.DUCKIE:
                 continue 
