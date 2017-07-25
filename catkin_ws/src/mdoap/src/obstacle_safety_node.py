@@ -10,7 +10,6 @@ class ObstacleSafetyNode:
         self.name = 'obstacle_safety_node'
         rospy.loginfo('[%s] started', self.name)
 	self.maxMarkers = 0
-        self.sub_ = rospy.Subscriber("~detection_list", ObstacleImageDetectionList, self.cbDetectionsList, queue_size=1)
 
         rospy.wait_for_service('ground_projection/get_ground_coordinate')
         self.ground_proj = rospy.ServiceProxy('ground_projection/get_ground_coordinate',GetGroundCoord)
@@ -24,6 +23,8 @@ class ObstacleSafetyNode:
         self.veh_name = rospy.get_namespace().strip("/")
 
         self.closeness_threshold = self.setupParam("~closeness_threshold", 0.2)
+
+        self.sub_ = rospy.Subscriber("~detection_list", ObstacleImageDetectionList, self.cbDetectionsList, queue_size=1)
 
     def setupParam(self, param_name, default_value):
         value = rospy.get_param(param_name,default_value)
