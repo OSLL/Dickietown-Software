@@ -139,7 +139,9 @@ class StaticObjectDetectorNode:
         self.tm = Matcher()
         self.active = True
         self.thread_lock = threading.Lock()
-        self.sub_image = rospy.Subscriber("~image_raw", Image, self.cbImage, queue_size=1)
+	#trying to use compressed image
+        #self.sub_image = rospy.Subscriber("~image_raw", Image, self.cbImage, queue_size=1)
+	self.sub_image = rospy.Subscriber("~image", CompressedImage, self.cbImage, queue_size=1)
         self.sub_switch = rospy.Subscriber("~switch",BoolStamped, self.cbSwitch, queue_size=1)
         self.pub_image = rospy.Publisher("~cone_detection_image", Image, queue_size=1)
         self.pub_detections_list = rospy.Publisher("~detection_list", ObstacleImageDetectionList, queue_size=1)
@@ -169,6 +171,7 @@ class StaticObjectDetectorNode:
         detections.header.stamp = image_msg.header.stamp
         detections.header.frame_id = image_msg.header.frame_id
         self.pub_detections_list.publish(detections)
+	rospy.loginfo("[%s] published" %(self.name))
 	# disable image plot        
 	#height,width = img.shape[:2]
         #try:
