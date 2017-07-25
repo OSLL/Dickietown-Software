@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import rospy
-from sensor_msgs.msg import CompressedImage, Image
+from sensor_msgs.msg import Image
 from std_msgs.msg import Float32
 from cv_bridge import CvBridge, CvBridgeError
 from duckietown_msgs.msg import ObstacleImageDetection, ObstacleImageDetectionList, ObstacleType, Rect, BoolStamped
@@ -139,9 +139,7 @@ class StaticObjectDetectorNode:
         self.tm = Matcher()
         self.active = True
         self.thread_lock = threading.Lock()
-	#trying to use compressed image
-        #self.sub_image = rospy.Subscriber("~image_raw", Image, self.cbImage, queue_size=1)
-	self.sub_image = rospy.Subscriber("~image", CompressedImage, self.cbImage, queue_size=1)
+        self.sub_image = rospy.Subscriber("~image_raw", Image, self.cbImage, queue_size=1)
         self.sub_switch = rospy.Subscriber("~switch",BoolStamped, self.cbSwitch, queue_size=1)
         self.pub_image = rospy.Publisher("~cone_detection_image", Image, queue_size=1)
         self.pub_detections_list = rospy.Publisher("~detection_list", ObstacleImageDetectionList, queue_size=1)
@@ -171,7 +169,6 @@ class StaticObjectDetectorNode:
         detections.header.stamp = image_msg.header.stamp
         detections.header.frame_id = image_msg.header.frame_id
         self.pub_detections_list.publish(detections)
-	rospy.loginfo("[%s] published" %(self.name))
 	# disable image plot        
 	#height,width = img.shape[:2]
         #try:
