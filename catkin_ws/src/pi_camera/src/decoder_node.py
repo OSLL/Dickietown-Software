@@ -40,20 +40,20 @@ class DecoderNode(object):
             return
         else:
             self.last_stamp = now
-        # time_start = time.time()
+        time_start = time.time()
         np_arr = np.fromstring(msg.data, np.uint8)
         cv_image = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
-        # time_1 = time.time()
+        time_1 = time.time()
         img_msg = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
-        # time_2 = time.time()
+        time_2 = time.time()
         img_msg.header.stamp = msg.header.stamp
         img_msg.header.frame_id = msg.header.frame_id
         self.pub_raw.publish(img_msg)
 
-        # time_3 = time.time()
-        # rospy.loginfo("[%s] Took %f sec to decompress."%(self.node_name,time_1 - time_start))
-        # rospy.loginfo("[%s] Took %f sec to conver to Image."%(self.node_name,time_2 - time_1))
-        # rospy.loginfo("[%s] Took %f sec to publish."%(self.node_name,time_3 - time_2))
+        time_3 = time.time()
+        rospy.loginfo("[%s] Took %f sec to decompress."%(self.node_name,time_1 - time_start))
+        rospy.loginfo("[%s] Took %f sec to conver to Image."%(self.node_name,time_2 - time_1))
+        rospy.loginfo("[%s] Took %f sec to publish."%(self.node_name,time_3 - time_2))
 
 if __name__ == '__main__': 
     rospy.init_node('decoder_low_freq',anonymous=False)
