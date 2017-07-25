@@ -76,16 +76,17 @@ class ObstacleSafetyNode:
 	    rospy.loginfo("[obstacle_safety_node] Object y: %f dist: %f" %(projected_point.gp.y, minDist))
             if dist<minDist:
                 minDist = dist
-	    # or True - always detect cone 
-            if dist<self.closeness_threshold:
-                # Trying not to falsely detect the lane lines as duckies that are too close
-                
+		
+            if  projected_point.gp.y < 0.2:   
 		# hack
                 b = BoolStamped()
                 b.header = detections_msg.header
                 b.data = True
                 self.pub_too_close.publish(b)
 	        return
+	    # or True - always detect cone 
+            if dist<self.closeness_threshold:
+                # Trying not to falsely detect the lane lines as duckies that are too close
 
                 if obstacle.type.type == ObstacleType.DUCKIE and projected_point.gp.y < 0.18:
                     # rospy.loginfo("Duckie too close y: %f dist: %f" %(projected_point.gp.y, minDist))
