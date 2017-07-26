@@ -42,7 +42,7 @@ class CameraNode(object):
         rospack = rospkg.RosPack()
         self.config = self.setupParam("~config","baseline")
         self.cali_file_folder = rospack.get_path('duckietown') + "/config/" + self.config + "/calibration/camera_intrinsic/"
-    
+
         self.frame_id = rospy.get_namespace().strip('/') + "/camera_optical_frame"
 
         self.has_published = False
@@ -53,7 +53,7 @@ class CameraNode(object):
         self.srv_set_camera_info = rospy.Service("~set_camera_info",SetCameraInfo,self.cbSrvSetCameraInfo)
 
         self.stream = io.BytesIO()
- 
+
 #self.camera.exposure_mode = 'off'
        # self.camera.awb_mode = 'off'
 
@@ -70,7 +70,7 @@ class CameraNode(object):
         elif not switch_msg.data and self.framerate != self.framerate_low:
             self.framerate = self.framerate_low
             self.update_framerate = True
- 
+
     def startCapturing(self):
         rospy.loginfo("[%s] Start capturing." %(self.node_name))
         while not self.is_shutdown and not rospy.is_shutdown():
@@ -79,7 +79,7 @@ class CameraNode(object):
                 self.camera.capture_sequence(gen,'jpeg',use_video_port=True,splitter_port=0)
             except StopIteration:
                 pass
-            print "updating framerate"
+            rospy.loginfo("[%s] Updating framerate." %(self.node_name))
             self.camera.framerate = self.framerate
             self.update_framerate=False
 
@@ -87,7 +87,7 @@ class CameraNode(object):
         rospy.loginfo("[%s] Capture Ended." %(self.node_name))
 
     def grabAndPublish(self,stream,publisher):
-        while not self.update_framerate and not self.is_shutdown and not rospy.is_shutdown(): 
+        while not self.update_framerate and not self.is_shutdown and not rospy.is_shutdown():
             yield stream
             # Construct image_msg
             # Grab image from stream
@@ -102,11 +102,11 @@ class CameraNode(object):
             image_msg.header.stamp = stamp
             image_msg.header.frame_id = self.frame_id
             publisher.publish(image_msg)
-                        
+
             # Clear stream
             stream.seek(0)
             stream.truncate()
-            
+
             if not self.has_published:
                 rospy.loginfo("[%s] Published the first image." %(self.node_name))
                 self.has_published = True
@@ -148,7 +148,7 @@ class CameraNode(object):
         'camera_matrix': {'data': camera_info_msg.K, 'rows':3, 'cols':3},
         'rectification_matrix': {'data': camera_info_msg.R, 'rows':3, 'cols':3},
         'projection_matrix': {'data': camera_info_msg.P,'rows':3, 'cols':4}}
-        
+
         rospy.loginfo("[saveCameraInfo] calib %s" %(calib))
 
         try:
@@ -157,7 +157,7 @@ class CameraNode(object):
         except IOError:
             return False
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     rospy.init_node('camera',anonymous=False)
     camera_node = CameraNode()
     rospy.on_shutdown(camera_node.onShutdown)
