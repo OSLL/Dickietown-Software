@@ -17,9 +17,9 @@ class ObstacleSafetyNode:
 
         self.pub_too_close = rospy.Publisher("~object_too_close", BoolStamped, queue_size=1)
         self.pub_projections = rospy.Publisher("~detection_list_proj", ObstacleProjectedDetectionList, queue_size=1)
-        
+
         self.pub_markers = rospy.Publisher("~object_detection_markers", MarkerArray, queue_size=1)
-        
+
 
         self.veh_name = rospy.get_namespace().strip("/")
 
@@ -51,7 +51,7 @@ class ObstacleSafetyNode:
         for obstacle in detections_msg.list:
             # temporary disable ducks
             if obstacle.type.type == ObstacleType.DUCKIE:
-                continue 
+                continue
             marker = Marker()
             rect = obstacle.bounding_box
             p.x = float(rect.x)/float(width)
@@ -75,10 +75,9 @@ class ObstacleSafetyNode:
 	    rospy.loginfo("[obstacle_safety_node] Object y: %f dist: %f" %(projected_point.gp.y, minDist))
             if dist<minDist:
                 minDist = dist
-	    # or True - always detect cone 
-            if dist<self.closeness_threshold or True:
+            if dist<self.closeness_threshold or projected_point.gp.y < 0.15:
                 # Trying not to falsely detect the lane lines as duckies that are too close
-                
+
                 if obstacle.type.type == ObstacleType.DUCKIE and projected_point.gp.y < 0.18:
                     # rospy.loginfo("Duckie too close y: %f dist: %f" %(projected_point.gp.y, minDist))
                     too_close = True
@@ -87,7 +86,7 @@ class ObstacleSafetyNode:
                     too_close = True
             projection.distance = dist
             projection_list.list.append(projection)
-            
+
             #print projected_point.gp
             marker.header = detections_msg.header
             marker.header.frame_id = self.veh_name
@@ -106,12 +105,12 @@ class ObstacleSafetyNode:
             marker.pose.orientation.w = 0.7071
             marker.pose.position.x = projected_point.gp.x
             marker.pose.position.y = projected_point.gp.y
-            marker.pose.position.z = projected_point.gp.z 
+            marker.pose.position.z = projected_point.gp.z
             marker.id = count
             count = count +1
 
             marker_array.markers.append(marker)
-                         
+
         if count > self.maxMarkers:
             self.maxMarkers = count
 
