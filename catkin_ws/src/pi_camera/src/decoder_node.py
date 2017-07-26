@@ -35,7 +35,7 @@ class DecoderNode(object):
     def cbImg(self,msg):
         if not self.active:
             return
-        rospy.loginfo("[%s] Entred to cbImg."%(self.node_name)    
+        rospy.loginfo("[%s] Entred to cbImg."%self.node_name    
         now = rospy.Time.now()
         if now - self.last_stamp < self.publish_duration:
             return
