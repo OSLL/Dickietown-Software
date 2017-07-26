@@ -32,6 +32,7 @@ class ObstacleSafetyNode:
         return value
 
     def cbDetectionsList(self, detections_msg):
+        rospy.loginfo('[%s] in cbDetectionsList', self.name)
         #For ground projection uncomment the next lines
         marker_array = MarkerArray()
 
@@ -126,6 +127,7 @@ class ObstacleSafetyNode:
         b.data = too_close
 
         self.pub_too_close.publish(b)
+        rospy.loginfo('[%s] published too_close flag', self.name)
         self.pub_projections.publish(projection_list)
         self.pub_markers.publish(marker_array)
 
