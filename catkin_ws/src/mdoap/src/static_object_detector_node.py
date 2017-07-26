@@ -30,7 +30,7 @@ class Matcher:
 
     def get_filtered_contours(self,img, contour_type):
         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        
+
         if contour_type == "CONE":
             frame_threshed = cv2.inRange(hsv_img, self.CONE[0], self.CONE[1])
             ret,thresh = cv2.threshold(frame_threshed,22,255,0)
@@ -43,10 +43,10 @@ class Matcher:
                     cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,5,2)
             thresh = cv2.Canny(frame_threshed, 100,200)
         else:
-            return 
-        
+            return
+
         filtered_contours = []
-        
+
         _, contours, hierarchy = cv2.findContours(\
                 thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
         contour_area = [ (cv2.contourArea(c), (c) ) for c in contours]
@@ -57,7 +57,7 @@ class Matcher:
         # plot box around contour
             x,y,w,h = cv2.boundingRect(cnt)
             box = (x,y,w,h)
-            d =  0.5*(x-width/2)**2 + (y-height)**2 
+            d =  0.5*(x-width/2)**2 + (y-height)**2
             if not(h>15 and w >10 and h<200 and w<200 and d < 120000):
                     continue
 	    if contour_type == "DUCK_CANNY":
@@ -98,7 +98,7 @@ class Matcher:
         height,width = img.shape[:2]
         object_list.imwidth = width
         object_list.imheight = height
-        
+
         # get filtered contours
         cone_contours = self.get_filtered_contours(img, "CONE")
 	# disable duck detection
@@ -109,13 +109,13 @@ class Matcher:
 	all_contours = [[], cone_contours]
         for i, contours in enumerate(all_contours):
             for (cnt, box, ds, aspect_ratio, mean_color)  in contours:
-                            
+
                 # plot box around contour
                 x,y,w,h = box
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 cv2.putText(img,self.terms[i], (x,y), font, 0.5,mean_color,4)
                 cv2.rectangle(img,(x,y),(x+w,y+h), mean_color,2)
-                
+
                 r = Rect()
                 r.x = x
                 r.y = y
@@ -134,7 +134,7 @@ class Matcher:
 class StaticObjectDetectorNode:
     def __init__(self):
         self.name = 'static_object_detector_node'
-        
+
         self.tm = Matcher()
         self.active = True
         self.thread_lock = threading.Lock()
@@ -143,7 +143,7 @@ class StaticObjectDetectorNode:
         self.pub_image = rospy.Publisher("~cone_detection_image", Image, queue_size=1)
         self.pub_detections_list = rospy.Publisher("~detection_list", ObstacleImageDetectionList, queue_size=1)
         self.bridge = CvBridge()
-	#comand below commented until leds disable on our bot 
+	#comand below commented until leds disable on our bot
         #turn_off_LEDs(speed=5)
         rospy.loginfo("[%s] Initialized." %(self.name))
 
@@ -158,8 +158,10 @@ class StaticObjectDetectorNode:
         thread.start()
 
     def processImage(self, image_msg):
+        rospy.loginfo("[%s] processImage entred." %(self.name))
         if not self.thread_lock.acquire(False):
             return
+        rospy.loginfo("[%s] processImage processing." %(self.name))
         try:
             image_cv=self.bridge.imgmsg_to_cv2(image_msg,"bgr8")
         except CvBridgeErrer as e:
@@ -173,7 +175,7 @@ class StaticObjectDetectorNode:
             self.pub_image.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
         except CvBridgeError as e:
             print(e)
-
+        rospy.loginfo("[%s] processImage exit." %(self.name))   
         self.thread_lock.release()
 
 if __name__=="__main__":
