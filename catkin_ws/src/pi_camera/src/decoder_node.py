@@ -41,6 +41,7 @@ class DecoderNode(object):
             return
         else:
             self.last_stamp = now
+        rospy.loginfo("[%s] Image processing in cbImg."%self.node_name)    
         # time_start = time.time()
         np_arr = np.fromstring(msg.data, np.uint8)
         cv_image = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
