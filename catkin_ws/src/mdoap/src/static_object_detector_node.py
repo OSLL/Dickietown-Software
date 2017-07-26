@@ -153,6 +153,7 @@ class StaticObjectDetectorNode:
     def cbImage(self,image_msg):
         if not self.active:
             return
+        rospy.loginfo("[%s] before creating thread." %(self.name))    
         thread = threading.Thread(target=self.processImage,args=(image_msg,))
         thread.setDaemon(True)
         thread.start()
@@ -175,7 +176,7 @@ class StaticObjectDetectorNode:
             self.pub_image.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
         except CvBridgeError as e:
             print(e)
-        rospy.loginfo("[%s] processImage exit." %(self.name))   
+        rospy.loginfo("[%s] processImage exit." %(self.name))
         self.thread_lock.release()
 
 if __name__=="__main__":
