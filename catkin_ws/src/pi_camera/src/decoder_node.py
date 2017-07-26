@@ -41,7 +41,7 @@ class DecoderNode(object):
             return
         else:
             self.last_stamp = now
-        rospy.loginfo("[%s] Image processing in cbImg."%self.node_name)    
+        rospy.loginfo("[%s] Image processing in cbImg."%self.node_name)
         # time_start = time.time()
         np_arr = np.fromstring(msg.data, np.uint8)
         cv_image = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
@@ -51,7 +51,7 @@ class DecoderNode(object):
         img_msg.header.stamp = msg.header.stamp
         img_msg.header.frame_id = msg.header.frame_id
         self.pub_raw.publish(img_msg)
-
+        rospy.loginfo("[%s] Image published in cbImg."%self.node_name)
         # time_3 = time.time()
         # rospy.loginfo("[%s] Took %f sec to decompress."%(self.node_name,time_1 - time_start))
         # rospy.loginfo("[%s] Took %f sec to conver to Image."%(self.node_name,time_2 - time_1))
