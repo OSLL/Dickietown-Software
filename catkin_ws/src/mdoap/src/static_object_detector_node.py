@@ -151,6 +151,7 @@ class StaticObjectDetectorNode:
         self.active = switch_msg.data
 
     def cbImage(self,image_msg):
+        rospy.loginfo("[%s] in cbImage, self.active:%s." %(self.name, self.active))
         if not self.active:
             return
         rospy.loginfo("[%s] before creating thread." %(self.name))
