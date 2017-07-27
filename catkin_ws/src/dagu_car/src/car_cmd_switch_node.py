@@ -40,8 +40,9 @@ class CarCmdSwitchNode(object):
         msg = Twist2DStamped()
         msg.v = 0
         msg.omega = 0
-        self.pub_cmd.publish(msg)
         rospy.loginfo('[%s] pubStop stop', self.name)
+        self.pub_cmd.publish(msg)
+
 
     def on_shutdown(self):
         rospy.loginfo("[%s] Shutting down." %(self.node_name))

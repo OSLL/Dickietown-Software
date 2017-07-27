@@ -126,8 +126,8 @@ class ObstacleSafetyNode:
         b.header = detections_msg.header
         b.data = too_close
 
+        rospy.loginfo('[%s] publishing too_close flag: %s', self.name, b.data)
         self.pub_too_close.publish(b)
-        rospy.loginfo('[%s] published too_close flag: %s', self.name, b.data)
         self.pub_projections.publish(projection_list)
         self.pub_markers.publish(marker_array)
 

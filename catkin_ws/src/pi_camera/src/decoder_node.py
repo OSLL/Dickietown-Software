@@ -50,8 +50,9 @@ class DecoderNode(object):
         # time_2 = time.time()
         img_msg.header.stamp = msg.header.stamp
         img_msg.header.frame_id = msg.header.frame_id
+        rospy.loginfo("[%s] Image publishing in cbImg."%self.node_name)
         self.pub_raw.publish(img_msg)
-        rospy.loginfo("[%s] Image published in cbImg."%self.node_name)
+
         # time_3 = time.time()
         # rospy.loginfo("[%s] Took %f sec to decompress."%(self.node_name,time_1 - time_start))
         # rospy.loginfo("[%s] Took %f sec to conver to Image."%(self.node_name,time_2 - time_1))

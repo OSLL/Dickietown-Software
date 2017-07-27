@@ -13,8 +13,9 @@ class SimpleStopControllerNode:
         stop.header = bool_msg.header
         stop.v = 0.0
         stop.omega = 0.0
+        rospy.loginfo('[%s] publishing stop', self.name)
         self.pub_car_cmd.publish(stop)
-        rospy.loginfo('[%s] published stop', self.name)
+
 
 if __name__=="__main__":
     rospy.init_node('simple_stop_controller_node')

@@ -153,7 +153,7 @@ class StaticObjectDetectorNode:
     def cbImage(self,image_msg):
         if not self.active:
             return
-        rospy.loginfo("[%s] before creating thread." %(self.name))    
+        rospy.loginfo("[%s] before creating thread." %(self.name))
         thread = threading.Thread(target=self.processImage,args=(image_msg,))
         thread.setDaemon(True)
         thread.start()
@@ -170,6 +170,7 @@ class StaticObjectDetectorNode:
         img, detections = self.tm.contour_match(image_cv)
         detections.header.stamp = image_msg.header.stamp
         detections.header.frame_id = image_msg.header.frame_id
+        rospy.loginfo("[%s] publish detections." %(self.name))
         self.pub_detections_list.publish(detections)
 	height,width = img.shape[:2]
         try:
