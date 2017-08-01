@@ -39,7 +39,7 @@
 
   		<!-- Object Safety -->
   		<group>
-  			<remap from="obstacle_safety_node/detection_list" to="static_object_detector_node/detection_list"/>
+  			<remap from="~detection_list_proj" to="static_object_detector_node/detection_list"/>
   			<include file="$(find mdoap)/launch/obstacle_safety_node.launch">
   				<arg name="veh" value="$(arg veh)"/>
   				<arg name="config" value="$(arg config)"/>
