@@ -5,7 +5,7 @@
     <arg name="/camera/local" default="false" />
 
     	<!-- Start Camera -->
-    	<group>
+
     		<include  file="$(find pi_camera)/launch/camera_node.launch">
     			<arg name="veh" value="$(arg veh)"/>
     			<arg name="config" value="$(arg config)"/>
@@ -23,9 +23,14 @@
     				<arg name="local" value="$(arg /camera/local)" />
     			</include>
     		</group>
-
-    	</group>
     	<!-- End Camera -->
+
+      <!-- Ground projection -->
+      <include file="$(find ground_projection)/launch/ground_projection.launch">
+				<arg name="veh" value="$(arg veh)"/>
+				<arg name="config" value="$(arg config)"/>
+				<arg name="param_file_name" value="$(arg param_file_name)"/>
+			</include>
 
   		<!-- Object Detection -->
   		<group>
@@ -39,7 +44,7 @@
 
   		<!-- Object Safety -->
   		<group>
-  			<remap from="~detection_list_proj" to="static_object_detector_node/detection_list"/>
+  			<remap from="obstacle_safety_node/detection_list" to="static_object_detector_node/detection_list"/>
   			<include file="$(find mdoap)/launch/obstacle_safety_node.launch">
   				<arg name="veh" value="$(arg veh)"/>
   				<arg name="config" value="$(arg config)"/>
