@@ -3,6 +3,8 @@
     <arg name="config" default="baseline" doc="Specify a config."/>
     <arg name="param_file_name" default="default" doc="Specify a param file. ex:megaman." />
     <arg name="/camera/local" default="false" />
+    <arg name="local" default="false"/>
+
 
     	<!-- Start Camera -->
     		<include  file="$(find pi_camera)/launch/camera_node.launch">
@@ -49,6 +51,7 @@
   				<arg name="veh" value="$(arg veh)"/>
   				<arg name="config" value="$(arg config)"/>
   				<arg name="param_file_name" value="$(arg param_file_name)"/>
+          <arg name="local" value="$(arg local)" />
   			</include>
   		</group>
 
@@ -59,6 +62,7 @@
   				<arg name="veh" value="$(arg veh)"/>
   				<arg name="config" value="$(arg config)"/>
   				<arg name="param_file_name" value="$(arg param_file_name)"/>
+          <arg name="local" value="$(arg local)" />
   			</include>
   		</group>
 
@@ -69,6 +73,7 @@
   				<arg name="veh" value="$(arg veh)"/>
   				<arg name="config" value="$(arg config)"/>
   				<arg name="param_file_name" value="$(arg param_file_name)"/>
+          <arg name="local" value="$(arg local)" />
   			</include>
   		</group>
 </launch>
