@@ -100,13 +100,16 @@ class Matcher:
         object_list.imheight = height
 
         # get filtered contours
+        rospy.loginfo("[%s] [4.1] before get_filtered_contours." %(self.name))
         cone_contours = self.get_filtered_contours(img, "CONE")
+        rospy.loginfo("[%s] [4.2] after get_filtered_contours." %(self.name))
 	# disable duck detection
         # duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
 
         # disable duck detection
 	# all_contours = [duck_contours, cone_contours]
         all_contours = [[], cone_contours]
+
         for i, contours in enumerate(all_contours):
             for (cnt, box, ds, aspect_ratio, mean_color)  in contours:
 
