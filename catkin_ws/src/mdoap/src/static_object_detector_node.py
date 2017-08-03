@@ -105,8 +105,8 @@ class Matcher:
         rospy.loginfo("[static_object_detector_node] [4.1] before get_filtered_contours.")
         try:
             cone_contours = self.get_filtered_contours(img, "CONE")
-        except:
-            rospy.loginfo("[static_object_detector_node] [4.1.5] get_filtered_contours ERROR.")    
+        except Exception as e:
+            rospy.loginfo("[static_object_detector_node] [4.1.5] get_filtered_contours ERROR. %s" %(e))
         rospy.loginfo("[static_object_detector_node] [4.2] after get_filtered_contours.")
 	# disable duck detection
         # duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
