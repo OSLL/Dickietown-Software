@@ -53,6 +53,7 @@
 	<arg name="/obstacle_avoidance/simple_stop" default="true"/>
 	<arg name="/obstacle_avoidance/detection" default="true"/>
 	<arg name="/obstacle_avoidance/safety" default="true"/>
+	<arg name="/obstacle_avoidance/local" default="false"/>
 
 	<arg name="vehicle_avoidance" default="false"/>
 	<arg name="/vehicle_avoidance/detection" default="true" />
@@ -323,6 +324,7 @@
 				<arg name="veh" value="$(arg veh)"/>
 				<arg name="config" value="$(arg config)"/>
 				<arg name="param_file_name" value="$(arg param_file_name)"/>
+				<arg name="local" value="$(arg /obstacle_avoidance/local)" />
 			</include>
 		</group>
 
@@ -333,6 +335,7 @@
 				<arg name="veh" value="$(arg veh)"/>
 				<arg name="config" value="$(arg config)"/>
 				<arg name="param_file_name" value="$(arg param_file_name)"/>
+				<arg name="local" value="$(arg /obstacle_avoidance/local)" />
 			</include>
 		</group>
 
@@ -343,6 +346,7 @@
 				<arg name="veh" value="$(arg veh)"/>
 				<arg name="config" value="$(arg config)"/>
 				<arg name="param_file_name" value="$(arg param_file_name)"/>
+				<arg name="local" value="$(arg /obstacle_avoidance/local)" />
 			</include>
 		</group>
 	</group>
