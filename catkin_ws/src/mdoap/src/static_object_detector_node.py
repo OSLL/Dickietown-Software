@@ -106,7 +106,7 @@ class Matcher:
 
         # disable duck detection
 	# all_contours = [duck_contours, cone_contours]
-	all_contours = [[], cone_contours]
+	    all_contours = [[], cone_contours]
         for i, contours in enumerate(all_contours):
             for (cnt, box, ds, aspect_ratio, mean_color)  in contours:
 
