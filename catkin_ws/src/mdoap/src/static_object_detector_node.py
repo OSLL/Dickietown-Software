@@ -51,9 +51,10 @@ class Matcher:
         rospy.loginfo("[static_object_detector_node] [4.1.4].")
         _, contours, hierarchy = cv2.findContours(\
                 thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
+        rospy.loginfo("[static_object_detector_node] [4.1.5].")
         contour_area = [ (cv2.contourArea(c), (c) ) for c in contours]
         contour_area = sorted(contour_area,reverse=True, key=lambda x: x[0])
-        rospy.loginfo("[static_object_detector_node] [4.1.5].")
+
         height,width = img.shape[:2]
         for (area,(cnt)) in contour_area:
         # plot box around contour
