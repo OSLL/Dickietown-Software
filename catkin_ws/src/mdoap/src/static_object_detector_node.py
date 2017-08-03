@@ -160,18 +160,22 @@ class StaticObjectDetectorNode:
         thread.start()
 
     def processImage(self, image_msg):
-        rospy.loginfo("[%s] processImage entred." %(self.name))
+        rospy.loginfo("[%s] [0] processImage entred." %(self.name))
         if not self.thread_lock.acquire(False):
             return
-        rospy.loginfo("[%s] processImage processing." %(self.name))
+        rospy.loginfo("[%s] [1]processImage processing." %(self.name))
         try:
+            rospy.loginfo("[%s] [2] before bridge.imgmsg_to_cv2." %(self.name))
             image_cv=self.bridge.imgmsg_to_cv2(image_msg,"bgr8")
+            rospy.loginfo("[%s] [3] after bridge.imgmsg_to_cv2." %(self.name))
         except CvBridgeErrer as e:
             print e
+        rospy.loginfo("[%s] [4] before contour_match." %(self.name))
         img, detections = self.tm.contour_match(image_cv)
+        rospy.loginfo("[%s] [5] after contour_match." %(self.name))
         detections.header.stamp = image_msg.header.stamp
         detections.header.frame_id = image_msg.header.frame_id
-        rospy.loginfo("[%s] publish detections." %(self.name))
+        rospy.loginfo("[%s] [6] publish detections." %(self.name))
         self.pub_detections_list.publish(detections)
 	height,width = img.shape[:2]
         try:
