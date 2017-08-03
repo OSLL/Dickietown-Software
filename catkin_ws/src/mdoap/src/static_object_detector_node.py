@@ -49,8 +49,7 @@ class Matcher:
         rospy.loginfo("[static_object_detector_node] [4.1.3].")
         filtered_contours = []
         rospy.loginfo("[static_object_detector_node] [4.1.4].")
-        _, contours, hierarchy = cv2.findContours(\
-                thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
+        _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
         rospy.loginfo("[static_object_detector_node] [4.1.5].")
         contour_area = [ (cv2.contourArea(c), (c) ) for c in contours]
         contour_area = sorted(contour_area,reverse=True, key=lambda x: x[0])
@@ -104,7 +103,10 @@ class Matcher:
 
         # get filtered contours
         rospy.loginfo("[static_object_detector_node] [4.1] before get_filtered_contours.")
-        cone_contours = self.get_filtered_contours(img, "CONE")
+        try:
+            cone_contours = self.get_filtered_contours(img, "CONE")
+        except:
+            rospy.loginfo("[static_object_detector_node] [4.1.5] get_filtered_contours ERROR.")    
         rospy.loginfo("[static_object_detector_node] [4.2] after get_filtered_contours.")
 	# disable duck detection
         # duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
