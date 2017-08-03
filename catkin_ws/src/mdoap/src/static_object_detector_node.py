@@ -15,6 +15,7 @@ class Matcher:
     DUCK = [np.array(x, np.uint8) for x in [[25,100,150], [35, 255, 255]] ]
     terms = {ObstacleType.CONE :"cone", ObstacleType.DUCKIE:"duck"}
     def __init__(self):
+        rospy.loginfo("[static_object_detector_node] Matcher __init__.")
         self.cone_color_low = self.setupParam("~cone_low", [0,80,80])
         self.cone_color_high = self.setupParam("~cone_high", [22, 255,255])
         self.duckie_color_low = self.setupParam("~duckie_low", [25, 100, 150])
@@ -87,11 +88,11 @@ class Matcher:
 
 
     def contour_match(self, img):
+        rospy.loginfo("[static_object_detector_node] [4.0] in contour_match.")
         '''
         Returns 1. Image with bounding boxes added
                 2. an ObstacleImageDetectionList
         '''
-        rospy.loginfo("[%s] [4.0] in contour_match." %(self.name))
         object_list = ObstacleImageDetectionList()
         object_list.list = []
 
@@ -100,9 +101,9 @@ class Matcher:
         object_list.imheight = height
 
         # get filtered contours
-        rospy.loginfo("[%s] [4.1] before get_filtered_contours." %(self.name))
+        rospy.loginfo("[static_object_detector_node] [4.1] before get_filtered_contours.")
         cone_contours = self.get_filtered_contours(img, "CONE")
-        rospy.loginfo("[%s] [4.2] after get_filtered_contours." %(self.name))
+        rospy.loginfo("[static_object_detector_node] [4.2] after get_filtered_contours.")
 	# disable duck detection
         # duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
 
