@@ -30,8 +30,9 @@ class Matcher:
         return value
 
     def get_filtered_contours(self,img, contour_type):
+        rospy.loginfo("[static_object_detector_node] [4.1.1].")
         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
+        rospy.loginfo("[static_object_detector_node] [4.1.2].")
         if contour_type == "CONE":
             frame_threshed = cv2.inRange(hsv_img, self.CONE[0], self.CONE[1])
             ret,thresh = cv2.threshold(frame_threshed,22,255,0)
@@ -45,14 +46,14 @@ class Matcher:
             thresh = cv2.Canny(frame_threshed, 100,200)
         else:
             return
-
+        rospy.loginfo("[static_object_detector_node] [4.1.3].")
         filtered_contours = []
-
+        rospy.loginfo("[static_object_detector_node] [4.1.4].")
         _, contours, hierarchy = cv2.findContours(\
                 thresh,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
         contour_area = [ (cv2.contourArea(c), (c) ) for c in contours]
         contour_area = sorted(contour_area,reverse=True, key=lambda x: x[0])
-
+        rospy.loginfo("[static_object_detector_node] [4.1.5].")
         height,width = img.shape[:2]
         for (area,(cnt)) in contour_area:
         # plot box around contour
