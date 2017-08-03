@@ -91,7 +91,7 @@ class Matcher:
         Returns 1. Image with bounding boxes added
                 2. an ObstacleImageDetectionList
         '''
-
+        rospy.loginfo("[%s] [4.0] in contour_match." %(self.name))
         object_list = ObstacleImageDetectionList()
         object_list.list = []
 
