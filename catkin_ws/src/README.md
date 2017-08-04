@@ -7,21 +7,26 @@
 ## [dagu_car]
 ## [duckiebot_visualizer]
 ## [duckie_rr_bridge]
-## [duckietown]
-## [duckietown_demos]
+## [duckietown](https://github.com/OSLL/Duckietown-Software/tree/master/catkin_ws/src/duckietown)
+Duckietown configs (.yaml) and launch files for all packages
+## [duckietown_demos](https://github.com/OSLL/Duckietown-Software/tree/master/catkin_ws/src/duckietown_demos)
+Launch files for some сompleted scenarios (including master.launch) 
 ## [duckietown_description]
 ## [duckietown_logs]
-## [duckietown_msgs]
+## [duckietown_msgs](https://github.com/OSLL/Duckietown-Software/tree/master/catkin_ws/src/duckietown_msgs)
+Messages and some services description
 ## [duckietown_unit_test]
 ## [f1]
-## [f23-LED]
+## [f23-LED](https://github.com/OSLL/Duckietown-Software/tree/master/catkin_ws/src/f23-LED)
+Led detection, interpretation, emission and led control
 ## [f4-devel]
 ## [fsm]
 ## [ground_projection]
 ## [indefinite_navigation]
 ## [intersection_control]
 ## [isam]
-## [joy_mapper]
+## [joy_mapper](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/joy_mapper)
+Control the bot with the joystick
 ## [lane_control]
 ## [lane_filter]
 ## [line_detector]
