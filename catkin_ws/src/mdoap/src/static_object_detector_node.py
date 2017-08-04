@@ -46,11 +46,11 @@ class Matcher:
             thresh = cv2.Canny(frame_threshed, 100,200)
         else:
             return
-        rospy.loginfo("[static_object_detector_node] [4.1.3].")
+        #rospy.loginfo("[static_object_detector_node] [4.1.3].")
         filtered_contours = []
-        rospy.loginfo("[static_object_detector_node] [4.1.4].")
+        #rospy.loginfo("[static_object_detector_node] [4.1.4].")
         contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-        rospy.loginfo("[static_object_detector_node] [4.1.5].")
+        #rospy.loginfo("[static_object_detector_node] [4.1.5].")
         contour_area = [ (cv2.contourArea(c), (c) ) for c in contours]
         contour_area = sorted(contour_area,reverse=True, key=lambda x: x[0])
 
@@ -89,7 +89,7 @@ class Matcher:
 
 
     def contour_match(self, img):
-        rospy.loginfo("[static_object_detector_node] [4.0] in contour_match.")
+        #rospy.loginfo("[static_object_detector_node] [4.0] in contour_match.")
         '''
         Returns 1. Image with bounding boxes added
                 2. an ObstacleImageDetectionList
@@ -102,12 +102,12 @@ class Matcher:
         object_list.imheight = height
 
         # get filtered contours
-        rospy.loginfo("[static_object_detector_node] [4.1] before get_filtered_contours.")
+        #rospy.loginfo("[static_object_detector_node] [4.1] before get_filtered_contours.")
         try:
             cone_contours = self.get_filtered_contours(img, "CONE")
         except Exception as e:
             rospy.loginfo("[static_object_detector_node] [4.1.5] get_filtered_contours ERROR. %s" %(e))
-        rospy.loginfo("[static_object_detector_node] [4.2] after get_filtered_contours.")
+        #rospy.loginfo("[static_object_detector_node] [4.2] after get_filtered_contours.")
 	# disable duck detection
         # duck_contours = self.get_filtered_contours(img, "DUCK_COLOR")
 
@@ -159,38 +159,38 @@ class StaticObjectDetectorNode:
         self.active = switch_msg.data
 
     def cbImage(self,image_msg):
-        rospy.loginfo("[%s] in cbImage, self.active:%s." %(self.name, self.active))
+        #rospy.loginfo("[%s] in cbImage, self.active:%s." %(self.name, self.active))
         if not self.active:
             return
-        rospy.loginfo("[%s] before creating thread." %(self.name))
+        #rospy.loginfo("[%s] before creating thread." %(self.name))
         thread = threading.Thread(target=self.processImage,args=(image_msg,))
         thread.setDaemon(True)
         thread.start()
 
     def processImage(self, image_msg):
-        rospy.loginfo("[%s] [0] processImage entred." %(self.name))
+        #rospy.loginfo("[%s] [0] processImage entred." %(self.name))
         if not self.thread_lock.acquire(False):
             return
-        rospy.loginfo("[%s] [1]processImage processing." %(self.name))
+        #rospy.loginfo("[%s] [1]processImage processing." %(self.name))
         try:
-            rospy.loginfo("[%s] [2] before bridge.imgmsg_to_cv2." %(self.name))
+            #rospy.loginfo("[%s] [2] before bridge.imgmsg_to_cv2." %(self.name))
             image_cv=self.bridge.imgmsg_to_cv2(image_msg,"bgr8")
-            rospy.loginfo("[%s] [3] after bridge.imgmsg_to_cv2." %(self.name))
+            #rospy.loginfo("[%s] [3] after bridge.imgmsg_to_cv2." %(self.name))
         except CvBridgeErrer as e:
             print e
-        rospy.loginfo("[%s] [4] before contour_match." %(self.name))
+        #rospy.loginfo("[%s] [4] before contour_match." %(self.name))
         img, detections = self.tm.contour_match(image_cv)
-        rospy.loginfo("[%s] [5] after contour_match." %(self.name))
+        #rospy.loginfo("[%s] [5] after contour_match." %(self.name))
         detections.header.stamp = image_msg.header.stamp
         detections.header.frame_id = image_msg.header.frame_id
-        rospy.loginfo("[%s] [6] publish detections." %(self.name))
+        #rospy.loginfo("[%s] [6] publish detections." %(self.name))
         self.pub_detections_list.publish(detections)
 	height,width = img.shape[:2]
         try:
             self.pub_image.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
         except CvBridgeError as e:
             print(e)
-        rospy.loginfo("[%s] processImage exit." %(self.name))
+        #rospy.loginfo("[%s] processImage exit." %(self.name))
         self.thread_lock.release()
 
 if __name__=="__main__":
