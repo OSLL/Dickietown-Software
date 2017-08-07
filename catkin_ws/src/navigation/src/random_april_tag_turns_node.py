@@ -20,7 +20,7 @@ class RandomAprilTagTurnsNode(object):
         # self.sub_topic_b = rospy.Subscriber("~topic_b", String, self.cbTopic)
         self.sub_topic_mode = rospy.Subscriber("~mode", FSMState, self.cbMode, queue_size=1)
         self.sub_topic_tag = rospy.Subscriber("~tag", AprilTagsWithInfos, self.cbTag, queue_size=1)
-       
+
 
         # Read parameters
         self.pub_timestep = self.setupParameter("~pub_timestep",1.0)
@@ -38,7 +38,7 @@ class RandomAprilTagTurnsNode(object):
             self.turn_type = -1
             self.pub_turn_type.publish(self.turn_type)
             rospy.loginfo("Turn type now: %i" %(self.turn_type))
-            
+
     def cbTag(self, tag_msgs):
         if(self.fsm_mode == "INTERSECTION_CONTROL"):
             #loop through list of april tags
@@ -57,6 +57,10 @@ class RandomAprilTagTurnsNode(object):
                         availableTurns = [0,1,2]
                     elif (signType == taginfo.T_INTERSECTION):
                         availableTurns = [0,2]
+                    elif (signType == taginfo.ONEWAY_RIGHT):
+                        availableTurns = [2]
+                    elif (signType == taginfo.ONEWAY_LEFT):
+                        availableTurns = [0]
 
                         #now randomly choose a possible direction
                     if(len(availableTurns)>0):
@@ -83,7 +87,7 @@ if __name__ == '__main__':
     # Create the NodeName object
     node = RandomAprilTagTurnsNode()
 
-    # Setup proper shutdown behavior 
+    # Setup proper shutdown behavior
     rospy.on_shutdown(node.on_shutdown)
     # Keep it spinning to keep the node alive
     rospy.spin()
