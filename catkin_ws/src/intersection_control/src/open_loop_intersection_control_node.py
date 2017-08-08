@@ -43,11 +43,11 @@ class OpenLoopIntersectionNode(object):
     def cbSrvLeft(self,req):
         self.trigger(0)
         return EmptyResponse()
-    
+
     def cbSrvForward(self,req):
         self.trigger(1)
-        return EmptyResponse()        
-    
+        return EmptyResponse()
+
     def cbSrvRight(self,req):
         self.trigger(2)
         return EmptyResponse()
@@ -55,7 +55,7 @@ class OpenLoopIntersectionNode(object):
 
     def getManeuver(self,param_name):
         param_list = rospy.get_param("~%s"%(param_name))
-        # rospy.loginfo("PARAM_LIST:%s" %param_list)        
+        # rospy.loginfo("PARAM_LIST:%s" %param_list)
         maneuver = list()
         for param in param_list:
             maneuver.append((param[0],Twist2DStamped(v=param[1],omega=param[2])))
@@ -72,7 +72,7 @@ class OpenLoopIntersectionNode(object):
 
     def cbStopLine(self,msg):
         self.stop_line_reading = msg
-                
+
         # TODO remove in lane it is now handled by the logic_gate_node
     def cbInLane(self,msg):
         self.in_lane = msg.data
@@ -95,7 +95,7 @@ class OpenLoopIntersectionNode(object):
         msg.data = True
         self.pub_done.publish(msg)
         rospy.loginfo("[%s] interesction_done!" %(self.node_name))
-    
+
     def update_trajectory(self,turn_type):
         rospy.loginfo("updating trajectory: distance from stop_line=%s, lane_pose_phi = %s", self.stop_line_reading.stop_line_point.x,  self.lane_pose.phi)
         first_leg = (self.maneuvers[turn_type]).pop(0)
@@ -135,6 +135,7 @@ class OpenLoopIntersectionNode(object):
                 if index > 1:
                     # See if need to publish interesction_done
                     if self.in_lane and not (published_already):
+                        rospy.loginfo("[%s] self.in_lane==true, returning from function trigger" %(self.node_name))
                         published_already = True
                         self.publishDoneMsg()
                         return
@@ -153,7 +154,7 @@ if __name__ == '__main__':
     # Create the NodeName object
     node = OpenLoopIntersectionNode()
 
-    # Setup proper shutdown behavior 
+    # Setup proper shutdown behavior
     rospy.on_shutdown(node.on_shutdown)
     # Keep it spinning to keep the node alive
     rospy.spin()
