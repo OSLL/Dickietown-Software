@@ -80,6 +80,8 @@
 	<arg name="navigation" default="false"/>
 	<arg name="/navigation/intersection_control" default="true"/>
 	<arg name="/navigation/apriltags_random" default="true"/>
+	<arg name="/navigation/apriltags_random/local" default="false"/>
+
 	<arg name="/navigation/random_sr_turns" default="false"/>
 	<arg name="/navigation/graph_planner" default="false"/>
 	<!-- NOTE: either apriltags_random or graph_planner but not both -->
@@ -551,6 +553,8 @@
 				<arg name="veh" value="$(arg veh)"/>
 				<arg name="config" value="$(arg config)"/>
 				<arg name="param_file_name" value="$(arg param_file_name)"/>
+				<arg name="local" value="$(arg /navigation/apriltags_random/local)"/>
+
 			</include>
 		</group>
 
