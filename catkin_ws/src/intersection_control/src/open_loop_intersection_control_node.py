@@ -133,7 +133,7 @@ class OpenLoopIntersectionNode(object):
                     return
                 cmd.header.stamp = rospy.Time.now()
                 self.pub_cmd.publish(cmd)
-                if index > 1:
+                if index > 2:
                     # See if need to publish interesction_done
                     if self.in_lane and not (published_already):
                         rospy.loginfo("[%s] self.in_lane==true, returning from function trigger" %(self.node_name))
