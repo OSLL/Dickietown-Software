@@ -82,7 +82,7 @@ class OpenLoopIntersectionNode(object):
         if (not self.mode == "INTERSECTION_CONTROL") and msg.state == "INTERSECTION_CONTROL":
             # Switch into INTERSECTION_CONTROL mode
             rospy.loginfo("[%s] %s triggered." %(self.node_name,self.mode))
-            isProcessedTurn = False
+            self.isProcessedTurn = False
             start = rospy.Time.now()
             current = rospy.Time.now()
             while current.secs - start.secs < 0.5:
@@ -96,7 +96,7 @@ class OpenLoopIntersectionNode(object):
         msg.header.stamp = rospy.Time.now()
         msg.data = True
         self.pub_done.publish(msg)
-        isProcessedTurn = True
+        self.isProcessedTurn = True
         rospy.loginfo("[%s] interesction_done!" %(self.node_name))
 
     def update_trajectory(self,turn_type):
@@ -120,9 +120,9 @@ class OpenLoopIntersectionNode(object):
             self.pub_cmd.publish(cmd)
             return
 
-        if isProcessedTurn:
+        if self.isProcessedTurn:
             return
-            
+
         if (self.trajectory_reparam):
             self.update_trajectory(turn_type)
 
