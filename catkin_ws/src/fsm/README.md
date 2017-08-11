@@ -30,15 +30,15 @@ Using for switch "parallel_autonomy" and "not_parallel_autonomy" mode when inter
 ## Parameters
 Specified in the [configuration file](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown/config/baseline/fsm/logic_gate_node/default.yaml)
 * `~gates`:
-    Descripts 
+    descripts input topics, logical operation on input topics value and outpu topic to publish boolean result
 * `~events`:
-
+    mapping from ros topic msgs to events with more simple names
+    
 ## Subscribe Topics
 * Subscribes to all topic in `~events` list; [duckietown_msgs/BoolStamped.msg](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/BoolStamped.msg) 
 
 ## Publish Topics
-* `~mode`: [duckietown_msgs/FSMState.msg](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/FSMState.msg), publish fsm state when it's changing
-* Publish to all `~nodes` topics; [duckietown_msgs/BoolStamped.msg](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/BoolStamped.msg) 
+* Publish to `output_topic` for every gate in `~gates` list; [duckietown_msgs/BoolStamped.msg](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/msg/BoolStamped.msg) 
 
 ## Services
-* `~set_state`: [SetFSMState.srv](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/duckietown_msgs/srv/SetFSMState.srv), sets fsm state
+none
