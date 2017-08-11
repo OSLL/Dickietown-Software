@@ -20,7 +20,8 @@ Messages and some services description
 ## [f23-LED](https://github.com/OSLL/Duckietown-Software/tree/master/catkin_ws/src/f23-LED)
 Led detection, interpretation, emission and led control
 ## [f4-devel]
-## [fsm]
+## [fsm](https://github.com/OSLL/Duckietown-Software/blob/master/catkin_ws/src/fsm)
+Final state machine and node-switcher "parallel_autonomy" and "not_parallel_autonomy" mode 
 ## [ground_projection]
 ## [indefinite_navigation]
 ## [intersection_control]
