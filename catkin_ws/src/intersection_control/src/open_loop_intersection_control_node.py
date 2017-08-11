@@ -20,13 +20,14 @@ class OpenLoopIntersectionNode(object):
         self.pub_cmd = rospy.Publisher("~car_cmd",Twist2DStamped,queue_size=1)
         self.pub_done = rospy.Publisher("~intersection_done",BoolStamped,queue_size=1)
 
-        # Construct maneuvers
-        self.maneuvers = dict()
+        # Construct originalManeuvers
+        self.originalManeuvers = dict()
 
-        self.maneuvers[0] = self.getManeuver("turn_left")
-        self.maneuvers[1] = self.getManeuver("turn_forward")
-        self.maneuvers[2] = self.getManeuver("turn_right")
-        # self.maneuvers[-1] = self.getManeuver("turn_stop")
+        self.originalManeuvers[0] = self.getManeuver("turn_left")
+        self.originalManeuvers[1] = self.getManeuver("turn_forward")
+        self.originalManeuvers[2] = self.getManeuver("turn_right")
+        # self.originalManeuvers[-1] = self.getManeuver("turn_stop")
+        self.maneuvers = copy.deepcopy(self.originalManeuvers)
 
         self.srv_turn_left = rospy.Service("~turn_left", Empty, self.cbSrvLeft)
         self.srv_turn_right = rospy.Service("~turn_right", Empty, self.cbSrvRight)
@@ -101,7 +102,8 @@ class OpenLoopIntersectionNode(object):
 
     def update_trajectory(self,turn_type):
         rospy.loginfo("updating trajectory: distance from stop_line=%s, lane_pose_phi = %s", self.stop_line_reading.stop_line_point.x,  self.lane_pose.phi)
-        first_leg = (self.maneuvers[turn_type]).pop(0)
+        (self.maneuver[turn_type]).pop(0)
+        first_leg = self.originalManeuvers[turn_type][0]
         exec_time = first_leg[0];
         car_cmd   = first_leg[1];
         new_exec_time = exec_time + self.stop_line_reading.stop_line_point.x/car_cmd.v
@@ -111,7 +113,7 @@ class OpenLoopIntersectionNode(object):
         new_first_leg = [new_exec_time,new_car_cmd]
         rospy.loginfo("old car command: %s", str(car_cmd))
         rospy.loginfo("new car command: %s", str(new_car_cmd))
-        self.maneuvers[turn_type].insert(0,new_first_leg)
+        self.maneuver[turn_type].insert(0,new_first_leg)
 
     def trigger(self,turn_type):
         if turn_type == -1: #Wait. Publish stop command. Does not publish done.
