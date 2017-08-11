@@ -106,10 +106,8 @@ class OpenLoopIntersectionNode(object):
         ###### warning this next line is because of wrong inverse kinematics - remove the 10s after it's fixed
         new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=10*(car_cmd.omega/10 - self.lane_pose.phi/new_exec_time))
         new_first_leg = [new_exec_time,new_car_cmd]
-        print "old car command"
-        print car_cmd
-        print "new_car_command"
-        print new_car_cmd
+        rospy.loginfo("old car command: %s", car_cmd)
+        rospy.loginfo("new_car_command: %s", new_car_cmd)
         self.maneuvers[turn_type].insert(0,new_first_leg)
 
     def trigger(self,turn_type):
