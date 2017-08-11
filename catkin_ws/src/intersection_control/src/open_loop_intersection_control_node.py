@@ -102,7 +102,7 @@ class OpenLoopIntersectionNode(object):
 
     def update_trajectory(self,turn_type):
         rospy.loginfo("updating trajectory: distance from stop_line=%s, lane_pose_phi = %s", self.stop_line_reading.stop_line_point.x,  self.lane_pose.phi)
-        (self.maneuver[turn_type]).pop(0)
+        (self.maneuvers[turn_type]).pop(0)
         first_leg = self.originalManeuvers[turn_type][0]
         exec_time = first_leg[0];
         car_cmd   = first_leg[1];
@@ -113,7 +113,7 @@ class OpenLoopIntersectionNode(object):
         new_first_leg = [new_exec_time,new_car_cmd]
         rospy.loginfo("old car command: %s", str(car_cmd))
         rospy.loginfo("new car command: %s", str(new_car_cmd))
-        self.maneuver[turn_type].insert(0,new_first_leg)
+        self.maneuvers[turn_type].insert(0,new_first_leg)
 
     def trigger(self,turn_type):
         if turn_type == -1: #Wait. Publish stop command. Does not publish done.
