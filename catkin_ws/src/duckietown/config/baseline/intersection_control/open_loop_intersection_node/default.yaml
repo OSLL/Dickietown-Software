@@ -1,7 +1,7 @@
 # Parameters for open_loop_intersection_node
 # #Turn right through intersection
 turn_left: #time, velocity, angular vel
-  - [0.9, 0.43, 0]
+  - [0.8, 0.43, 0]
   - [1.6, 0.43, 4.7] #[1.8, 0.43, 2.896]
   - [0.5, 0.43, 0.0]
   - [0.8, 0.43, 0.0]
