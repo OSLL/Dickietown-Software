@@ -176,6 +176,9 @@ class OpenLoopIntersectionNode(object):
                 cmd.header.stamp = rospy.Time.now()
                 self.pub_cmd.publish(cmd)
                 self.rate.sleep()
+        cmd = Twist2DStamped(v=0.0,omega=0.0)
+        cmd.header.stamp = rospy.Time.now()
+        self.pub_cmd.publish(cmd)        
 
     def on_shutdown(self):
         rospy.loginfo("[%s] Shutting down." %(self.node_name))
