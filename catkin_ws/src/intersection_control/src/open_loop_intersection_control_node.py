@@ -33,6 +33,11 @@ class OpenLoopIntersectionNode(object):
         self.srv_turn_right = rospy.Service("~turn_right", Empty, self.cbSrvRight)
         self.srv_turn_forward = rospy.Service("~turn_forward", Empty, self.cbSrvForward)
 
+        self.srv_turn_left_test = rospy.Service("~turn_left_test", Empty, self.cbSrvLeftTest)
+        self.srv_turn_right_test = rospy.Service("~turn_right_test", Empty, self.cbSrvRightTest)
+        self.srv_turn_forward_test = rospy.Service("~turn_forward_test", Empty, self.cbSrvForwardTest)
+
+
         self.rate = rospy.Rate(30)
 
         # Subscribers
@@ -54,6 +59,17 @@ class OpenLoopIntersectionNode(object):
         self.trigger(2)
         return EmptyResponse()
 
+    def cbSrvLeftTest(self,req):
+        self.trigger_test(0)
+        return EmptyResponse()
+
+    def cbSrvForwardTest(self,req):
+        self.trigger_test(1)
+        return EmptyResponse()
+
+    def cbSrvRightTest(self,req):
+        self.trigger_test(2)
+        return EmptyResponse()
 
     def getManeuver(self,param_name):
         param_list = rospy.get_param("~%s"%(param_name))
@@ -108,7 +124,6 @@ class OpenLoopIntersectionNode(object):
         car_cmd   = first_leg[1];
         new_exec_time = exec_time + self.stop_line_reading.stop_line_point.x/car_cmd.v
         rospy.loginfo("old exec_time = %s, new_exec_time = %s" ,exec_time, new_exec_time)
-        ###### warning this next line is because of wrong inverse kinematics - remove the 10s after it's fixed
         new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time))
         new_first_leg = [new_exec_time,new_car_cmd]
         rospy.loginfo("old car command: %s", str(car_cmd))
@@ -150,6 +165,17 @@ class OpenLoopIntersectionNode(object):
         # Done with the sequence
         if not published_already:
             self.publishDoneMsg()
+
+    def trigger_test(self,turn_type):
+        for index, pair in enumerate(self.maneuvers[turn_type]):
+            rospy.loginfo("[%s] drive %s sec", self.node_name, pair[0])
+            cmd = copy.deepcopy(pair[1])
+            start_time = rospy.Time.now()
+            end_time = start_time + rospy.Duration.from_sec(pair[0])
+            while rospy.Time.now() < end_time:
+                cmd.header.stamp = rospy.Time.now()
+                self.pub_cmd.publish(cmd)
+                self.rate.sleep()
 
     def on_shutdown(self):
         rospy.loginfo("[%s] Shutting down." %(self.node_name))
