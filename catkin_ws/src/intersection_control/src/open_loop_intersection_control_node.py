@@ -124,7 +124,8 @@ class OpenLoopIntersectionNode(object):
         car_cmd   = first_leg[1];
         new_exec_time = exec_time + self.stop_line_reading.stop_line_point.x/car_cmd.v
         rospy.loginfo("old exec_time = %s, new_exec_time = %s" ,exec_time, new_exec_time)
-        new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time))
+        # *2.0 - hack
+        new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time)*2.0)
         new_first_leg = [new_exec_time,new_car_cmd]
         rospy.loginfo("old car command: %s (omega=%s)", str(car_cmd), car_cmd.omega )
         rospy.loginfo("new car command: %s (omega=%s)", str(new_car_cmd), new_car_cmd.omega)
