@@ -126,8 +126,8 @@ class OpenLoopIntersectionNode(object):
         rospy.loginfo("old exec_time = %s, new_exec_time = %s" ,exec_time, new_exec_time)
         new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time))
         new_first_leg = [new_exec_time,new_car_cmd]
-        rospy.loginfo("old car command: %s", str(car_cmd))
-        rospy.loginfo("new car command: %s", str(new_car_cmd))
+        rospy.loginfo("old car command: %s (omega=%s)", str(car_cmd), car_cmd.omega )
+        rospy.loginfo("new car command: %s (omega=%s)", str(new_car_cmd), new_car_cmd.omega)
         self.maneuvers[turn_type].insert(0,new_first_leg)
 
     def trigger(self,turn_type):
@@ -178,7 +178,7 @@ class OpenLoopIntersectionNode(object):
                 self.rate.sleep()
         cmd = Twist2DStamped(v=0.0,omega=0.0)
         cmd.header.stamp = rospy.Time.now()
-        self.pub_cmd.publish(cmd)        
+        self.pub_cmd.publish(cmd)
 
     def on_shutdown(self):
         rospy.loginfo("[%s] Shutting down." %(self.node_name))
