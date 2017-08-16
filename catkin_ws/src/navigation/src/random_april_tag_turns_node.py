@@ -61,6 +61,8 @@ class RandomAprilTagTurnsNode(object):
                         availableTurns = [2]
                     elif (signType == taginfo.ONEWAY_LEFT):
                         availableTurns = [0]
+                    elif (signType == taginfo.STOP):
+                        availableTurns = [1]    
 
                         #now randomly choose a possible direction
                     if(len(availableTurns)>0):
