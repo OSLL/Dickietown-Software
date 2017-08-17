@@ -48,13 +48,13 @@ class VehicleCoordinator():
 
         if rospy.get_param("~intersectionType") == "trafficLight":
             self.traffic_light_intersection = True
-            self.possible_intersection_type = TR_L
+            self.possible_intersection_type = self.TR_L
         elif rospy.get_param("~intersectionType") == "plain":
             self.traffic_light_intersection = False
-            self.possible_intersection_type = SIMPLE
+            self.possible_intersection_type = self.SIMPLE
         else:
             self.traffic_light_intersection = False
-            self.possible_intersection_type = ANY
+            self.possible_intersection_type = self.ANY
 
         rospy.loginfo('[simple_coordination_node]: possible_intersection_type=%s' % str(self.possible_intersection_type))
 
