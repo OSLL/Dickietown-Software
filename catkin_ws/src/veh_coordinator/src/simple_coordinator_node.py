@@ -189,6 +189,7 @@ class VehicleCoordinator():
 
         elif self.state == State.TL_SENSING:
             if self.traffic_light == SignalsDetection.NO_TRAFFIC_LIGHT:
+                rospy.loginfo('[simple_coordination_node] No TL, move to AT_STOP_CLEARING state')
                 self.traffic_light_intersection = False
                 self.set_state(State.AT_STOP_CLEARING)
             elif self.traffic_light == SignalsDetection.GO:
