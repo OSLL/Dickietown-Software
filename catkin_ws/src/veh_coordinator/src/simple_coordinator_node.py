@@ -106,7 +106,7 @@ class VehicleCoordinator():
         else:
             self.clearance_to_go = CoordinationClearance.WAIT
 
-        rospy.logdebug('[simple_coordination_node] Transitioned to state' + self.state)
+        rospy.loginfo('[simple_coordination_node] Transitioned to state' + self.state)
 
     def time_at_current_state(self):
         return time() - self.last_state_transition
