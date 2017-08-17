@@ -197,6 +197,7 @@ class VehicleCoordinator():
                     self.traffic_light_intersection = False
                     self.set_state(State.AT_STOP_CLEARING)
                 self.tl_sense_try += 1
+                self.reset_signals_detection()
             elif self.traffic_light == SignalsDetection.GO:
                 self.traffic_light_intersection = True
                 self.set_state(State.GO)
