@@ -26,6 +26,13 @@ class VehicleCoordinator():
     T_CROSS = 6.0  # seconds
     T_SENSE = 2.0      # seconds
 
+    # intersections type
+    # [plain; trafficLight; any]
+    SIMPLE = 0
+    TR_L = 1
+    ANY = 2
+
+
     def __init__(self):
         rospy.loginfo('Coordination Mode Started')
 
@@ -41,10 +48,15 @@ class VehicleCoordinator():
 
         if rospy.get_param("~intersectionType") == "trafficLight":
             self.traffic_light_intersection = True
+            self.possible_intersection_type = TR_L
+        elif rospy.get_param("~intersectionType") == "plain":
+            self.traffic_light_intersection = False
+            self.possible_intersection_type = SIMPLE
         else:
             self.traffic_light_intersection = False
+            self.possible_intersection_type = ANY
 
-        rospy.loginfo('[simple_coordination_node]: trafficLight=%s' % str(self.traffic_light_intersection))
+        rospy.loginfo('[simple_coordination_node]: possible_intersection_type=%s' % str(self.possible_intersection_type))
 
         # Subscriptions
         self.mode = 'LANE_FOLLOWING'
@@ -70,6 +82,7 @@ class VehicleCoordinator():
             self.loop()
             rospy.sleep(0.1)
 
+    # TODO attention to "and not self.traffic_light_intersection:"
     def set_state(self, state):
         self.state = state
         self.last_state_transition = time()
@@ -136,7 +149,7 @@ class VehicleCoordinator():
         if self.state == State.LANE_FOLLOWING:
             if self.mode == 'COORDINATION':
                 self.reset_signals_detection()
-                if self.traffic_light_intersection:
+                if self.possible_intersection_type > 0:
                     self.set_state(State.TL_SENSING)
                 else:
                     self.set_state(State.AT_STOP_CLEARING)
@@ -175,8 +188,14 @@ class VehicleCoordinator():
                 self.set_state(State.AT_STOP_CLEAR)
 
         elif self.state == State.TL_SENSING:
-            if self.traffic_light == SignalsDetection.GO:
+            if self.traffic_light == SignalsDetection.NO_TRAFFIC_LIGHT:
+                self.traffic_light_intersection = False
+                self.set_state(State.AT_STOP_CLEARING)
+            elif self.traffic_light == SignalsDetection.GO:
+                self.traffic_light_intersection = True
                 self.set_state(State.GO)
+            elif self.traffic_light == SignalsDetection.STOP:
+                self.traffic_light_intersection = True
 
 if __name__ == '__main__':
     car = VehicleCoordinator()
