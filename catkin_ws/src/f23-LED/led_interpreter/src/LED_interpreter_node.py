@@ -3,7 +3,7 @@ import rospy
 import time
 #from led_detection.LEDDetector import LEDDetector
 from std_msgs.msg import Byte
-from duckietown_msgs.msg import FSMState, Vector2D, LEDDetection, LEDDetectionArray, LEDDetectionDebugInfo, SignalsDetection #AprilTags 
+from duckietown_msgs.msg import FSMState, Vector2D, LEDDetection, LEDDetectionArray, LEDDetectionDebugInfo, SignalsDetection #AprilTags
 from sensor_msgs.msg import CompressedImage
 #from duckietown_utils.bag_logs import numpy_from_ros_compressed
 #import numpy as np
@@ -15,11 +15,11 @@ class LEDInterpreterNode(object):
 
 		self.node = rospy.init_node('LED_interpreter_node',anonymous=True)
 		self.node_name = rospy.get_name()
-		
-		self.trafficLightIntersection = False		
+
+		self.trafficLightIntersection = False
 
 		rospy.loginfo('[%s] Intersection Type: %s'%(self.node_name, rospy.get_param("~intersectionType")))
-		if rospy.get_param("~intersectionType") == "trafficLight":
+		if rospy.get_param("~intersectionType") == "trafficLight" or rospy.get_param("~intersectionType") == "any":
 			self.trafficLightIntersection = True
 
 
@@ -33,7 +33,7 @@ class LEDInterpreterNode(object):
 		self.carSignalC = self.protocol['signals']['CAR_SIGNAL_C']['frequency']
 
 		self.signalFrequencies = [self.carSignalA, self.carSignalB,self.carSignalC]
-		self.vehicleSignals = [SignalsDetection.SIGNAL_A,SignalsDetection.SIGNAL_B,SignalsDetection.SIGNAL_C] 
+		self.vehicleSignals = [SignalsDetection.SIGNAL_A,SignalsDetection.SIGNAL_B,SignalsDetection.SIGNAL_C]
 
 
 		#initialize the standard output message
@@ -98,7 +98,7 @@ class LEDInterpreterNode(object):
 						self.traffic_light_state = SignalsDetection.STOP
 						break
 
-		#case with stop sign intersection	
+		#case with stop sign intersection
 		else:
 			for item in msg.detections:
 				rospy.loginfo("[%s]:\n pixel = %f\n right bound = %f\n left bound =%f\n measured frequence=%f\n" %(self.node_name, item.pixels_normalized.x,self.label['right'],self.label['left'],item.frequency))
@@ -118,17 +118,17 @@ class LEDInterpreterNode(object):
 					for i in range(len(self.signalFrequencies)):
 						if abs(self.signalFrequencies[i] - detected_freq) < 0.1:
 							self.right = self.vehicleSignals[i]
-							break	
-	
+							break
+
 		rospy.loginfo("[%s] The observed LEDs are:\n Front = %s\n Right = %s\n Traffic light state = %s" %(self.node_name, self.front, self.right,self.traffic_light_state))
 		self.pub_interpret.publish(SignalsDetection(front=self.front,right=self.right,left=self.left,traffic_light_state=self.traffic_light_state))
-					
-					
+
+
 
 	#def publish_topics(self):
 	#	if self.active:
 	#		if self.hasObservedSignals:
-	#			self.pub_interpret.publish(SignalsDetection(front=self.front,right=self.right,left=self.left,traffic_light_state=self.traffic_light_state))	
+	#			self.pub_interpret.publish(SignalsDetection(front=self.front,right=self.right,left=self.left,traffic_light_state=self.traffic_light_state))
 
 
 
@@ -147,4 +147,3 @@ if __name__ == '__main__':
     interpreternode = LEDInterpreterNode()
     rospy.on_shutdown(interpreternode.onShutdown)
     rospy.spin()
-
