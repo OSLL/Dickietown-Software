@@ -43,8 +43,8 @@ class RandomAprilTagTurnsNode(object):
         if(self.fsm_mode == "INTERSECTION_CONTROL"):
             #loop through list of april tags
             for i, taginfo in enumerate(tag_msgs.infos):
-                if tag_msgs.detections[i].pose.pose.position.y > 0.7:
-                    continue 
+                if tag_msgs.detections[i].pose.pose.position.y > 0.0:
+                    continue
                 print taginfo
                 rospy.loginfo("[%s] taginfo." %(taginfo))
                 if(taginfo.tag_type == taginfo.SIGN):
