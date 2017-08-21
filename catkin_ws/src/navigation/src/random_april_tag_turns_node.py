@@ -42,7 +42,9 @@ class RandomAprilTagTurnsNode(object):
     def cbTag(self, tag_msgs):
         if(self.fsm_mode == "INTERSECTION_CONTROL"):
             #loop through list of april tags
-            for taginfo in tag_msgs.infos:
+            for i, taginfo in enumerate(tag_msgs.infos):
+                if tag_msgs.detections[i].pose.pose.position.y > 0.7:
+                    continue 
                 print taginfo
                 rospy.loginfo("[%s] taginfo." %(taginfo))
                 if(taginfo.tag_type == taginfo.SIGN):
@@ -62,7 +64,7 @@ class RandomAprilTagTurnsNode(object):
                     elif (signType == taginfo.ONEWAY_LEFT):
                         availableTurns = [0]
                     elif (signType == taginfo.STOP):
-                        availableTurns = [1]    
+                        availableTurns = [1]
 
                         #now randomly choose a possible direction
                     if(len(availableTurns)>0):
