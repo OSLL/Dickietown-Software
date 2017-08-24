@@ -34,6 +34,7 @@ class CarCmdSwitchNode(object):
 
     def cbWheelsCmd(self,msg,src_name):
         if src_name == self.current_src_name:
+            rospy.loginfo("[%s] cbWheelsCmd (%s): %s", self.node_name, src_name, msg)
             self.pub_cmd.publish(msg)
 
     def pubStop(self):
