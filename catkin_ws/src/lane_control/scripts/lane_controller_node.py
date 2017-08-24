@@ -102,7 +102,7 @@ class lane_controller(object):
         #self.pub_wheels_cmd.publish(wheels_cmd_msg)
 
     def cbPose(self,lane_pose_msg):
-        rospy.loginfo("[%s] cbPose lane_pose_msg: %s ", self.node_name, lane_pose_msg)
+        # rospy.loginfo("[%s] cbPose lane_pose_msg: %s ", self.node_name, lane_pose_msg)
         self.lane_reading = lane_pose_msg
 
         cross_track_err = lane_pose_msg.d - self.d_offset
@@ -120,7 +120,7 @@ class lane_controller(object):
         # car_control_msg.steering = -car_control_msg.steering
         # print "controls: speed %f, steering %f" % (car_control_msg.speed, car_control_msg.steering)
         # self.pub_.publish(car_control_msg)
-        rospy.loginfo("[%s] cbPose car_control_msg: %s ", self.node_name, car_control_msg)
+        # rospy.loginfo("[%s] cbPose car_control_msg: %s ", self.node_name, car_control_msg)
         self.publishCmd(car_control_msg)
 
         # debuging
