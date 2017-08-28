@@ -63,6 +63,7 @@ class StopLineFilterNode(object):
         if not self.active or self.sleep:
             return
         good_seg_count=0
+        angles = []
         stop_line_x_accumulator=0.0
         stop_line_y_accumulator=0.0
         rospy.loginfo("processSegments start!")
@@ -71,10 +72,12 @@ class StopLineFilterNode(object):
                 continue
             if segment.points[0].x < 0 or segment.points[1].x < 0: # the point is behind us
                 continue
-            rospy.loginfo("segment.points=(%s; %s)", segment.points[0], segment.points[1])
+            dx = max(segment.points[0].x, segment.points[1].x) - min(segment.points[0].x, segment.points[1].x)
+            dy = max(segment.points[0].y, segment.points[1].y) - min(segment.points[0].y, segment.points[1].y)
+            angle = math.atan(dx/dy)
+            angles.append(angle)
             p1_lane = self.to_lane_frame(segment.points[0])
             p2_lane = self.to_lane_frame(segment.points[1])
-            rospy.loginfo("p1_lane=%s; p2_lane=%s", p1_lane, p2_lane)
             avg_x = 0.5*(p1_lane[0] + p2_lane[0])
             avg_y = 0.5*(p1_lane[1] + p2_lane[1])
             stop_line_x_accumulator += avg_x
@@ -86,16 +89,19 @@ class StopLineFilterNode(object):
         if (good_seg_count < self.min_segs):
             stop_line_reading_msg.stop_line_detected = False
             stop_line_reading_msg.at_stop_line = False
-            stop_line_reading_msg.line_angle = 14.88
             self.pub_stop_line_reading.publish(stop_line_reading_msg)
             return
 
+        angle_median = np.median(np.array(angles))
+        rospy.loginfo("stop line angles array: %s", angles)
+        rospy.loginfo("stop line angles array median: %s", angle_median)
         stop_line_reading_msg.stop_line_detected = True
         stop_line_point = Point()
         stop_line_point.x = stop_line_x_accumulator/good_seg_count
         stop_line_point.y = stop_line_y_accumulator/good_seg_count
         stop_line_reading_msg.stop_line_point = stop_line_point
         stop_line_reading_msg.at_stop_line = stop_line_point.x < self.stop_distance and math.fabs(stop_line_point.y) < self.lanewidth/4
+        stop_line_reading_msg.line_angle = angle_median
         self.pub_stop_line_reading.publish(stop_line_reading_msg)
         if stop_line_reading_msg.at_stop_line:
             msg = BoolStamped()
