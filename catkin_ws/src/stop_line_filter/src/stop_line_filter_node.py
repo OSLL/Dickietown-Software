@@ -73,12 +73,15 @@ class StopLineFilterNode(object):
                 continue
             if segment.points[0].x < 0 or segment.points[1].x < 0: # the point is behind us
                 continue
+            # calculate absolute diff between x and y coordinates
             dx = max(segment.points[0].x, segment.points[1].x) - min(segment.points[0].x, segment.points[1].x)
             dy = max(segment.points[0].y, segment.points[1].y) - min(segment.points[0].y, segment.points[1].y)
             rospy.loginfo("points: %s %s", segment.points[0], segment.points[1])
-            rospy.loginfo("dx: %s; dy %s; diag: %s", dx, dy, math.sqrt(dx**2 + dy**2))
+            rospy.loginfo("dx: %s; dy %s; hypo: %s", dx, dy, math.sqrt(dx**2 + dy**2))
+            # take into account only segments with length greater than a certain value
             if math.sqrt(dx**2 + dy**2) > 0.015:
                 angle = math.atan(dx/dy)
+                # for lines inclined like \ use negative sign
                 if (segment.points[0].y > segment.points[1].y and segment.points[0].x < segment.points[1].x) or\
                     (segment.points[0].y < segment.points[1].y and segment.points[0].x > segment.points[1].x):
                     angle *= -1.0
@@ -100,6 +103,7 @@ class StopLineFilterNode(object):
             self.pub_stop_line_reading.publish(stop_line_reading_msg)
             return
 
+        # use median value as answer
         angle_median = np.median(np.array(angles))
         rospy.loginfo("stop line angles array: %s", angles)
         rospy.loginfo("stop line angles array median: %s", angle_median)
