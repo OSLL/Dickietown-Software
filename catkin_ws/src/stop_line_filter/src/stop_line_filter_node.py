@@ -86,6 +86,7 @@ class StopLineFilterNode(object):
         if (good_seg_count < self.min_segs):
             stop_line_reading_msg.stop_line_detected = False
             stop_line_reading_msg.at_stop_line = False
+            stop_line_reading_msg.line_angle = 14.88
             self.pub_stop_line_reading.publish(stop_line_reading_msg)
             return
 

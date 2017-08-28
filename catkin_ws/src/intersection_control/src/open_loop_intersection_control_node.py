@@ -89,6 +89,7 @@ class OpenLoopIntersectionNode(object):
         self.lane_pose = msg
 
     def cbStopLine(self,msg):
+        rospy.loginfo("[%s] cbStopLine: %s" %(self.node_name, msg.line_angle))
         self.stop_line_reading = msg
 
         # TODO remove in lane it is now handled by the logic_gate_node
