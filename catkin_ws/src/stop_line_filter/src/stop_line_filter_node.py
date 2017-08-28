@@ -75,6 +75,9 @@ class StopLineFilterNode(object):
             dx = max(segment.points[0].x, segment.points[1].x) - min(segment.points[0].x, segment.points[1].x)
             dy = max(segment.points[0].y, segment.points[1].y) - min(segment.points[0].y, segment.points[1].y)
             angle = math.atan(dx/dy)
+            if (segment.points[0].y < segment.points[1].y and segment.points[0].x > segment.points[1].x) or\
+               (segment.points[0].y > segment.points[1].y and segment.points[0].x < segment.points[1].x):
+               angle *= -1.0
             angles.append(angle)
             p1_lane = self.to_lane_frame(segment.points[0])
             p2_lane = self.to_lane_frame(segment.points[1])
