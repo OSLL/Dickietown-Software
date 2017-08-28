@@ -75,9 +75,11 @@ class StopLineFilterNode(object):
                 continue
             dx = max(segment.points[0].x, segment.points[1].x) - min(segment.points[0].x, segment.points[1].x)
             dy = max(segment.points[0].y, segment.points[1].y) - min(segment.points[0].y, segment.points[1].y)
+            rospy.loginfo("points: %s %s", segment.points[0], segment.points[1])
+            rospy.loginfo("dx: %s; dy %s; diag: %s", dx, dy, math.sqrt(dx**2 + dx**2))
             if math.sqrt(dx**2 + dx**2) > 0.015:
                 angle = math.atan(dx/dy)
-                rospy.loginfo("points: %s %s", segment.points[0], segment.points[1])
+
                 if (segment.points[0].y > segment.points[1].y and segment.points[0].x < segment.points[1].x) or\
                     (segment.points[0].y < segment.points[1].y and segment.points[0].x > segment.points[1].x):
                     angle *= -1.0
