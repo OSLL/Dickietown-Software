@@ -95,6 +95,7 @@ class StopLineFilterNode(object):
         angle_median = np.median(np.array(angles))
         rospy.loginfo("stop line angles array: %s", angles)
         rospy.loginfo("stop line angles array median: %s", angle_median)
+        rospy.loginfo("stop line angles array median in degrees: %s", math.degrees(angle_median))
         stop_line_reading_msg.stop_line_detected = True
         stop_line_point = Point()
         stop_line_point.x = stop_line_x_accumulator/good_seg_count
