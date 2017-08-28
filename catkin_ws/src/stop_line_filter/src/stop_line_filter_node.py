@@ -64,6 +64,7 @@ class StopLineFilterNode(object):
             return
         good_seg_count=0
         angles = []
+
         stop_line_x_accumulator=0.0
         stop_line_y_accumulator=0.0
         rospy.loginfo("processSegments start!")
@@ -75,9 +76,11 @@ class StopLineFilterNode(object):
             dx = max(segment.points[0].x, segment.points[1].x) - min(segment.points[0].x, segment.points[1].x)
             dy = max(segment.points[0].y, segment.points[1].y) - min(segment.points[0].y, segment.points[1].y)
             angle = math.atan(dx/dy)
+            rospy.loginfo("points: %s %s", segment.points[0], segment.points[1])
             if (segment.points[0].y > segment.points[1].y and segment.points[0].x < segment.points[1].x) or\
                (segment.points[0].y < segment.points[1].y and segment.points[0].x > segment.points[1].x):
                angle *= -1.0
+               rospy.loginfo("angle *= -1.0)
             angles.append(angle)
             p1_lane = self.to_lane_frame(segment.points[0])
             p2_lane = self.to_lane_frame(segment.points[1])
