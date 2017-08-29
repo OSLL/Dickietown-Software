@@ -82,8 +82,8 @@ class StopLineFilterNode(object):
             if math.sqrt(dx**2 + dy**2) > 0.015:
                 angle = math.atan(dx/dy)
                 # for lines inclined like \ use negative sign
-                if (segment.points[0].y > segment.points[1].y and segment.points[0].x < segment.points[1].x) or\
-                    (segment.points[0].y < segment.points[1].y and segment.points[0].x > segment.points[1].x):
+                if (segment.points[0].y > segment.points[1].y and segment.points[0].x > segment.points[1].x) or\
+                    (segment.points[0].y < segment.points[1].y and segment.points[0].x < segment.points[1].x):
                     angle *= -1.0
                     rospy.loginfo("angle *= -1.0")
                 angles.append(angle)
