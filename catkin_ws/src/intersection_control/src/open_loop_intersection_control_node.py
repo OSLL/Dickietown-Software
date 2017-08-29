@@ -118,14 +118,16 @@ class OpenLoopIntersectionNode(object):
         rospy.loginfo("[%s] interesction_done!" %(self.node_name))
 
     def update_trajectory(self,turn_type):
-        rospy.loginfo("updating trajectory: distance from stop_line=%s, lane_pose_phi = %s", self.stop_line_reading.stop_line_point.x,  self.lane_pose.phi)
+        rospy.loginfo("updating trajectory: distance from stop_line=%s, lane_pose_phi = %s, stop_line_phi = %s", self.stop_line_reading.stop_line_point.x,  self.lane_pose.phi, self.stop_line_reading.line_angle)
         (self.maneuvers[turn_type]).pop(0)
         first_leg = self.originalManeuvers[turn_type][0]
         exec_time = first_leg[0];
         car_cmd   = first_leg[1];
         new_exec_time = exec_time + self.stop_line_reading.stop_line_point.x/car_cmd.v
         rospy.loginfo("old exec_time = %s, new_exec_time = %s" ,exec_time, new_exec_time)
-        new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time))
+        #new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time))
+        # minus (-self.stop_line_reading.line_angle) because need to use bot angle in lane instead stop-line angle
+        new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - (-self.stop_line_reading.line_angle)/new_exec_time))
         new_first_leg = [new_exec_time,new_car_cmd]
         rospy.loginfo("old car command: %s (omega=%s)", str(car_cmd), car_cmd.omega )
         rospy.loginfo("new car command: %s (omega=%s)", str(new_car_cmd), new_car_cmd.omega)
