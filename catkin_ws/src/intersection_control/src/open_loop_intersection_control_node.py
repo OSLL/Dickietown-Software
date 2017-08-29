@@ -155,6 +155,7 @@ class OpenLoopIntersectionNode(object):
             while rospy.Time.now() < end_time:
                 if not self.mode == "INTERSECTION_CONTROL": # If not in the mode anymore, return
                     return
+                rospy.loginfo("[%s] publishing cmd = %s", self.node_name, pair[1])    
                 cmd.header.stamp = rospy.Time.now()
                 self.pub_cmd.publish(cmd)
                 if index > 2:
