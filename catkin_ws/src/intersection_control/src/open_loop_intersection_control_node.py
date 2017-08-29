@@ -148,7 +148,7 @@ class OpenLoopIntersectionNode(object):
 
         published_already = False
         for index, pair in enumerate(self.maneuvers[turn_type]):
-            rospy.loginfo("[%s] drive %s sec", self.node_name, pair[0])
+            rospy.loginfo("[%s] drive %s sec, cmd = %s", self.node_name, pair[0], pair[1])
             cmd = copy.deepcopy(pair[1])
             start_time = rospy.Time.now()
             end_time = start_time + rospy.Duration.from_sec(pair[0])
