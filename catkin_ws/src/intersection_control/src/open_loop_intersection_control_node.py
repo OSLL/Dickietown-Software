@@ -127,7 +127,7 @@ class OpenLoopIntersectionNode(object):
         rospy.loginfo("old exec_time = %s, new_exec_time = %s" ,exec_time, new_exec_time)
         #new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - self.lane_pose.phi/new_exec_time))
         # minus (-self.stop_line_reading.line_angle) because need to use bot angle in lane instead stop-line angle
-        new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - (-self.stop_line_reading.line_angle * 10)/new_exec_time))
+        new_car_cmd = Twist2DStamped(v=car_cmd.v,omega=(car_cmd.omega - (-self.stop_line_reading.line_angle * 2)/new_exec_time))
         new_first_leg = [new_exec_time,new_car_cmd]
         rospy.loginfo("old car command: %s (omega=%s)", str(car_cmd), car_cmd.omega )
         rospy.loginfo("new car command: %s (omega=%s)", str(new_car_cmd), new_car_cmd.omega)
