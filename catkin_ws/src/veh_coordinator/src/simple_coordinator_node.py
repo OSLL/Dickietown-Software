@@ -159,6 +159,7 @@ class VehicleCoordinator():
 
         elif self.state == State.AT_STOP_CLEARING:
             if self.right_veh != SignalsDetection.NO_CAR or self.opposite_veh == SignalsDetection.SIGNAL_B or self.opposite_veh == SignalsDetection.SIGNAL_C:
+                rospy.loginfo('[simple_coordination_node] self.right_veh: %s; self.opposite_veh: %s; self.opposite_veh: %s;', self.right_veh, self.opposite_veh, self.opposite_veh)
                 self.set_state(State.AT_STOP_CLEARING)
             elif self.time_at_current_state() > self.T_CROSS + self.T_SENSE:
                 self.set_state(State.AT_STOP_CLEAR)
