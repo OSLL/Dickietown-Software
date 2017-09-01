@@ -117,7 +117,7 @@ class VehicleCoordinator():
         self.__dict__[name] = value
 
     def process_signals_detection(self, msg):
-        rospy.loginfo('[simple_coordination_node] signals arrived!')
+        rospy.loginfo('[simple_coordination_node] signals arrived!: msg.traffic_light_state:%s;  msg.right: %s; msg.front: %s;', msg.traffic_light_state, msg.right, msg.front)
         self.set('traffic_light', msg.traffic_light_state)
         self.set('right_veh', msg.right)
         self.set('opposite_veh', msg.front)
@@ -159,7 +159,7 @@ class VehicleCoordinator():
                     self.set_state(State.AT_STOP_CLEARING)
 
         elif self.state == State.AT_STOP_CLEARING:
-            rospy.loginfo('[simple_coordination_node] self.right_veh: %s; self.opposite_veh: %s; self.opposite_veh: %s;', self.right_veh, self.opposite_veh, self.opposite_veh)
+            rospy.loginfo('[simple_coordination_node] self.right_veh: %s; self.opposite_veh: %s;', self.right_veh, self.opposite_veh)
             if self.right_veh != SignalsDetection.NO_CAR or self.opposite_veh == SignalsDetection.SIGNAL_B or self.opposite_veh == SignalsDetection.SIGNAL_C:
                 self.set_state(State.AT_STOP_CLEARING)
             elif self.time_at_current_state() > self.T_CROSS + self.T_SENSE:
