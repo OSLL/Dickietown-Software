@@ -12,16 +12,15 @@
 #
 # =================================================
 
-import RPi.GPIO as GPIO
 import time
-
+import pigpio
 
 class RGB_LED():
     # ===============   LED Mode Define ================
     LED_COMMON_ANODE = True
-    SDI = 11  # 14(74HC) data
-    RCLK = 12  # 12(74HC) ST_CP time
-    SRCLK = 13  # 11(74HC) SH_CP shift
+    SDI = 17 #11  # 14(74HC) data
+    RCLK = 18 #12  # 12(74HC) ST_CP latch
+    SRCLK = 27 #13  # 11(74HC) SH_CP shift
     LEDS_COUNT = 5
     # =================================================
 
@@ -32,17 +31,18 @@ class RGB_LED():
 
     def __init__(self, debug=False):
         #self.BITS = format(0, '016b')  # 0_000_000_000_000_000
-	self.BITS = 0
+        self.BITS = 0
         self.setup()
 
+
     def setup(self):
-        GPIO.setmode(GPIO.BOARD)  # Number GPIOs by its physical location
-        GPIO.setup(self.SDI, GPIO.OUT)
-        GPIO.setup(self.RCLK, GPIO.OUT)
-        GPIO.setup(self.SRCLK, GPIO.OUT)
-        GPIO.output(self.SDI, GPIO.LOW)
-        GPIO.output(self.RCLK, GPIO.LOW)
-        GPIO.output(self.SRCLK, GPIO.LOW)
+        self.pi = pigpio.pi()
+        self.pi.set_mode(self.SDI, pigpio.OUTPUT)
+        self.pi.set_mode(self.RCLK, pigpio.OUTPUT)
+        self.pi.set_mode(self.SRCLK, pigpio.OUTPUT)
+        self.pi.write(self.SDI, 0)
+        self.pi.write(self.RCLK, 0)
+        self.pi.write(self.SRCLK, 0)
 
     def setRGB(self, led, color):
         self.setLEDBrightness(led, self.OFFSET_RED, color[0])
@@ -78,7 +78,11 @@ class RGB_LED():
 	self.BITS = int(self.BITS) & del_led
 
     def newBit(self, bit, brightness):
-        newLed = brightness * 2 ** bit
+	if brightness == 0:
+	    newLed = 0
+	else:
+	    newLed = 2 ** bit
+    #    newLed = brightness * 2 ** bit
 	self.BITS = int(self.BITS + newLed)
 
     def inverseBits(self):
@@ -91,30 +95,24 @@ class RGB_LED():
             dat = self.BITS
 
         for bit in range(0, 16):
-            GPIO.output(self.SDI, 0x8000 & (dat << bit))
-            GPIO.output(self.SRCLK, GPIO.HIGH)
+            if 0x8000 & (dat << bit) == 0:
+                self.pi.write(self.SDI, 0)
+            else:
+                #After multiplying on 0x8000 we know the highest bit of a number
+                self.pi.write(self.SDI, 1)
+            self.pi.write(self.SRCLK, 1)
             time.sleep(0.001)
-            GPIO.output(self.SRCLK, GPIO.LOW)
+            self.pi.write(self.SRCLK, 0)
 
     def outBits(self):
-        GPIO.output(self.RCLK, GPIO.HIGH)
+        self.pi.write(self.RCLK, 1)
         time.sleep(0.001)
-        GPIO.output(self.RCLK, GPIO.LOW)
+        self.pi.write(self.RCLK, 0)
 
     def update(self):
         self.setBits(self.BITS)
         self.outBits()
 
-    def destroy(self):  # When program ending, the function is executed.
-        for i in range(self.LEDS_COUNT):
-            self.setRGB(i, self.off)
-        self.setBits(self.BITS)
-        self.outBits()
-        # GPIO.cleanup()
-
     def __del__(self):
-        try:
-            self.destroy()
-        finally:
-            GPIO.cleanup()
+	self.pi.stop()
 
